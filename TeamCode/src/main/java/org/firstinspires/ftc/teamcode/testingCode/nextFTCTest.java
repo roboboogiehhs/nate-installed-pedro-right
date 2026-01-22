@@ -1,28 +1,31 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.testingCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.flywheel;
 
-import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.groups.ParallelRaceGroup;
+import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.extensions.pedro.PedroDriverControlled;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.driving.DriverControlledCommand;
-import dev.nextftc.hardware.driving.MecanumDriverControlled;
 import dev.nextftc.hardware.impl.MotorEx;
 
 @TeleOp(name = "NextFTC TeleOp Program Java")
 public class nextFTCTest extends NextFTCOpMode {
     public nextFTCTest() {
         addComponents(
-                new SubsystemComponent(Lift.INSTANCE, Claw.INSTANCE),
+                new SubsystemComponent(Lift.INSTANCE, Claw.INSTANCE, flywheel.INSTANCE),
                 BulkReadComponent.INSTANCE,
-                BindingsComponent.INSTANCE
+                BindingsComponent.INSTANCE,
+                new PedroComponent(Constants::createFollower)
         );
     }
 
@@ -31,6 +34,8 @@ public class nextFTCTest extends NextFTCOpMode {
     private final MotorEx frontRightMotor = new MotorEx("front_right");
     private final MotorEx backLeftMotor = new MotorEx("back_left").reversed();
     private final MotorEx backRightMotor = new MotorEx("back_right");
+
+
 
     @Override
     public void onStartButtonPressed() {
@@ -55,14 +60,27 @@ public class nextFTCTest extends NextFTCOpMode {
         Gamepads.gamepad2().dpadUp()
                 .whenBecomesTrue(Lift.INSTANCE.toHigh)
                 .whenBecomesFalse(Claw.INSTANCE.open);
-        
+
         Gamepads.gamepad2().rightTrigger().greaterThan(0.2)
                 .whenBecomesTrue(
                         Claw.INSTANCE.close.then(Lift.INSTANCE.toHigh)
                 );
 
+        Gamepads.gamepad1().a()
+                        .whenBecomesTrue(
+                                new SequentialGroup(
+                                        flywheel.INSTANCE.runUntilAtSpeed(1500),
+                                        new ParallelRaceGroup(
+                                                flywheel.INSTANCE.runAtVelocity(1500),
+                                                new Delay(1000)
+                                        ).then(flywheel.INSTANCE.stop())
+                                )
+
+                        );
+
         Gamepads.gamepad2().leftBumper().whenBecomesTrue(
                 Claw.INSTANCE.open.and(Lift.INSTANCE.toLow)
         );
+
     }
 }

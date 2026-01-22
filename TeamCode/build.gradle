@@ -18,6 +18,14 @@ apply from: '../build.dependencies.gradle'
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
 
+    //ADD THIS
+    compileSdk 35
+
+    defaultConfig {
+        minSdk 24
+    }
+    //
+
     packagingOptions {
         jniLibs.useLegacyPackaging true
     }
@@ -28,4 +36,8 @@ dependencies {
     implementation 'dev.nextftc:ftc:1.0.1'
     implementation 'dev.nextftc:hardware:1.0.1' // If you would like to use the hardware module
     implementation 'dev.nextftc.extensions:pedro:1.0.0'
+    dependencies {
+        implementation "com.bylazar:ftcontrol:0.6.8"
+    }
+
 }
