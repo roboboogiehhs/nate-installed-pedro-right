@@ -1,11 +1,17 @@
-package org.firstinspires.ftc.teamcode.testingCode;
+package org.firstinspires.ftc.teamcode.Qualifiers;
 
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
+import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Shooting;
+import org.firstinspires.ftc.teamcode.subsystems.blocker;
+import org.firstinspires.ftc.teamcode.subsystems.flywheel;
+import org.firstinspires.ftc.teamcode.subsystems.intake;
+import org.firstinspires.ftc.teamcode.subsystems.uptake;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -15,18 +21,19 @@ import com.pedropathing.util.Timer;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@Autonomous(name = "NextFTC Autonomous Program Java")
-public class autonomousTest extends NextFTCOpMode {
+@Autonomous(name = "BLUE autonomous")
+public class blueAutoClose extends NextFTCOpMode {
 
-    public autonomousTest(){
+    public blueAutoClose(){
         addComponents(
-                new SubsystemComponent(Lift.INSTANCE, Claw.INSTANCE),
+                new SubsystemComponent(flywheel.INSTANCE, blocker.INSTANCE, intake.INSTANCE, uptake.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 new PedroComponent(Constants::createFollower)
         );
@@ -92,25 +99,32 @@ public class autonomousTest extends NextFTCOpMode {
     public Command autonomousRoutine() {
         return new SequentialGroup(
                 new ParallelGroup(
-                        //ready flywheel
+                        flywheel.INSTANCE.runAtVelocity(1230),
                         new FollowPath(scorePreload)
                 ),
-                //shoot
+                Shooting.shoot(1230),
 
                 new FollowPath(grabPickup1),
                 new FollowPath(scorePickup1),
-                //shoot
+                Shooting.shoot(1210),
 
                 new FollowPath(grabPickup2),
-                new FollowPath(scorePickup2)
+                new FollowPath(scorePickup2),
+                Shooting.shoot(1210),
 
-                //shoot
+                new LambdaCommand("Save Pose")
+                        .setStart(this::savePose)
+                        .setIsDone(() -> true)
         );
     }
 
     @Override
     public void onStartButtonPressed() {
-        autonomousRoutine().schedule();
+        autonomousRoutine().schedule();  // This just SCHEDULES, doesn't wait
+    }
+
+    private void savePose(){
+        PoseStorage.currentPose = PedroComponent.follower().getPose();
     }
 
 

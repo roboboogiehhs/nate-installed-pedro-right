@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Qualifiers;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 
@@ -19,8 +20,13 @@ import dev.nextftc.hardware.driving.DriverControlledCommand;
 @TeleOp(name = "BLUE teleop")
 public class BlueQualTeleOp extends NextFTCOpMode {
 
-    private static final double BLUE_GOAL_X = 50.0;
-    private static final double BLUE_GOAL_Y = -50.0;
+    private static final double BLUE_GOAL_X = 122;
+    private static final double BLUE_GOAL_Y = 22;
+
+    //todo update these
+    private static final Pose BLUE_AUTO_END = new Pose(-24, -45, Math.toRadians(-90));
+    private static final Pose BLUE_GOAL = new Pose(-65, -40, Math.toRadians(0));
+    private static final Pose CENTER = new Pose(0, 0, Math.toRadians(0));
 
     public BlueQualTeleOp() {
         addComponents(
@@ -34,6 +40,25 @@ public class BlueQualTeleOp extends NextFTCOpMode {
     @Override
     public void onInit() {
         blocker.INSTANCE.close.schedule();
+        PedroComponent.follower().setPose(PoseStorage.currentPose);
+    }
+
+
+    @Override
+    public void onInitLoop() {
+        Pose pose = PedroComponent.follower().getPose();
+        telemetry.addData("Position", "X: %.1f, Y: %.1f, H: %.1f°",
+                pose.getX(), pose.getY(), Math.toDegrees(pose.getHeading()));
+        telemetry.addLine("DPAD: UP=AutoEnd, DOWN=Goal,, RIGHT=Center");
+        telemetry.update();
+
+        if (gamepad1.dpad_up) {
+            PedroComponent.follower().setPose(BLUE_AUTO_END);
+        } else if (gamepad1.dpad_down) {
+            PedroComponent.follower().setPose(BLUE_GOAL);
+        } else if (gamepad1.dpad_right) {
+            PedroComponent.follower().setPose(CENTER);
+        }
     }
 
     @Override
@@ -46,6 +71,18 @@ public class BlueQualTeleOp extends NextFTCOpMode {
                 false
         );
         driverControlled.schedule();
+
+        // Both stick buttons: Reset heading (current facing = new forward)
+        Gamepads.gamepad1().leftStickButton().and(Gamepads.gamepad1().rightStickButton())
+                .whenBecomesTrue(
+                        new LambdaCommand("Reset Heading")
+                                .setStart(() -> {
+                                    Pose pose = PedroComponent.follower().getPose();
+                                    PedroComponent.follower().setPose(new Pose(pose.getX(), pose.getY(), 0));
+                                })
+                                .setIsDone(() -> true)
+                );
+
 
         // RIGHT BUMPER: Shoot
         Gamepads.gamepad1().rightBumper().whenBecomesTrue(
