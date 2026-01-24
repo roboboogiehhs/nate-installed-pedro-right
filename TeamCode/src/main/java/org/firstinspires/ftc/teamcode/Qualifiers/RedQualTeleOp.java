@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 
+import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -20,21 +21,21 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.driving.DriverControlledCommand;
 
-@TeleOp(name = "BLUE teleop")
-public class BlueQualTeleOp extends NextFTCOpMode {
+@TeleOp(name = "RED teleop")
+public class RedQualTeleOp extends NextFTCOpMode {
 
-    private static final double BLUE_GOAL_X = 13;
-    private static final double BLUE_GOAL_Y = 137;
+    private static final double RED_GOAL_X = 131;
+    private static final double RED_GOAL_Y = 137;
 
     //todo update these to play with for the regression
-    private static final double BLUE_GOAL_X_DISTANCE = 131;
-    private static final double BLUE_GOAL_Y_DISTANCE = 137;
+    private static final double RED_GOAL_X_DISTANCE = 131;
+    private static final double RED_GOAL_Y_DISTANCE = 137;
 
-    private static final Pose BLUE_AUTO_END = new Pose(30, 90, Math.toRadians(180));
-    private static final Pose BLUE_GOAL = new Pose(34, 134, Math.toRadians(270));
-    private static final Pose CENTER = new Pose(0, 0, Math.toRadians(180));
+    private static final Pose RED_AUTO_END = new Pose(123, 96, Math.toRadians(0));
+    private static final Pose RED_GOAL = new Pose(110, 134, Math.toRadians(270));
+    private static final Pose CENTER = new Pose(0, 0, Math.toRadians(0));
 
-    public BlueQualTeleOp() {
+    public RedQualTeleOp() {
         addComponents(
                 new SubsystemComponent(blocker.INSTANCE, flywheel.INSTANCE, intake.INSTANCE, uptake.INSTANCE),
                 BulkReadComponent.INSTANCE,
@@ -55,20 +56,19 @@ public class BlueQualTeleOp extends NextFTCOpMode {
 
         while (!isStarted() && !isStopRequested()) {
             Pose pose = PedroComponent.follower().getPose();
-            telemetry.addLine("BLUE AUTO");
+            telemetry.addLine("RED AUTO");
             telemetry.addLine();
-
             telemetry.addData("Position", "X: %.1f, Y: %.1f, H: %.1f°",
                     pose.getX(), pose.getY(), Math.toDegrees(pose.getHeading()));
             telemetry.addLine("DPAD: UP=AutoEnd, DOWN=Center, RIGHT=Goal");
             telemetry.update();
 
             if (gamepad1.dpad_up) {
-                PedroComponent.follower().setPose(BLUE_AUTO_END);
+                PedroComponent.follower().setPose(RED_AUTO_END);
             } else if (gamepad1.dpad_down) {
                 PedroComponent.follower().setPose(CENTER);
             } else if (gamepad1.dpad_right) {
-                PedroComponent.follower().setPose(BLUE_GOAL);
+                PedroComponent.follower().setPose(RED_GOAL);
             }
         }
     }
@@ -90,7 +90,7 @@ public class BlueQualTeleOp extends NextFTCOpMode {
                         new LambdaCommand("Reset Heading")
                                 .setStart(() -> {
                                     Pose pose = PedroComponent.follower().getPose();
-                                    PedroComponent.follower().setPose(new Pose(pose.getX(), pose.getY(), Math.toRadians(180)));
+                                    PedroComponent.follower().setPose(new Pose(pose.getX(), pose.getY(), Math.toRadians(0)));
                                 })
                                 .setIsDone(() -> true)
                 );
@@ -121,16 +121,28 @@ public class BlueQualTeleOp extends NextFTCOpMode {
         );
 
         Gamepads.gamepad1().y().whenBecomesTrue(
-                new LambdaCommand("Turn to Goal")
-                        .setStart(() -> {
-                            Pose pose = PedroComponent.follower().getPose();
-                            double targetHeading = calculateHeadingToGoal(pose);
+                new SequentialGroup(
+                        new LambdaCommand("Stop Driver")
+                                .setStart(driverControlled::cancel)
+                                .setIsDone(() -> true),
+                        new LambdaCommand("Turn to Goal")
+                                .setStart(() -> {
+                                    Pose pose = PedroComponent.follower().getPose();
+                                    double targetHeading = calculateHeadingToGoal(pose);
 
-                            Path turnPath = new Path(new BezierLine(pose, pose));
-                            turnPath.setLinearHeadingInterpolation(pose.getHeading(), targetHeading);
-                            PedroComponent.follower().followPath(turnPath);
-                        })
-                        .setIsDone(() -> !PedroComponent.follower().isBusy())
+                                    // epsilon move 0.1 inches in robot-x direction (or field-x, pick one consistently)
+                                    Pose epsilon = new Pose(pose.getX() + 0.1, pose.getY(), pose.getHeading());
+
+                                    Path turnPath = new Path(new BezierLine(pose, epsilon));
+
+                                    turnPath.setLinearHeadingInterpolation(pose.getHeading(), targetHeading);
+                                    PedroComponent.follower().followPath(turnPath, true);
+                                })
+                                .setIsDone(() -> !PedroComponent.follower().isBusy()),
+                        new LambdaCommand("Resume Driver")
+                                .setStart(driverControlled::schedule)
+                                .setIsDone(() -> true)
+                )
         );
 
         // B BUTTON: Emergency stop
@@ -139,14 +151,14 @@ public class BlueQualTeleOp extends NextFTCOpMode {
         // DPAD UP: Reset position
         Gamepads.gamepad1().dpadUp().whenBecomesTrue(
                 new LambdaCommand("Reset Position")
-                        .setStart(() -> PedroComponent.follower().setPose(new Pose(0, 0, Math.toRadians(180))))
+                        .setStart(() -> PedroComponent.follower().setPose(new Pose(0, 0, Math.toRadians(0))))
                         .setIsDone(() -> true)
         );
     }
 
     private double calculateHeadingToGoal(Pose pose) {
-        double dx = BLUE_GOAL_X - pose.getX();
-        double dy = BLUE_GOAL_Y - pose.getY();
+        double dx = RED_GOAL_X - pose.getX();
+        double dy = RED_GOAL_Y - pose.getY();
         double heading = Math.atan2(dy, dx) + Math.PI;
 
         // Normalize to [-PI, PI]
@@ -182,8 +194,8 @@ public class BlueQualTeleOp extends NextFTCOpMode {
 
     private double getDistanceToGoal() {
         Pose pose = PedroComponent.follower().getPose();
-        double dx = BLUE_GOAL_X_DISTANCE - pose.getX();
-        double dy = BLUE_GOAL_Y_DISTANCE - pose.getY();
+        double dx = RED_GOAL_X_DISTANCE - pose.getX();
+        double dy = RED_GOAL_Y_DISTANCE - pose.getY();
         return Math.sqrt(dx * dx + dy * dy) * 0.0254;
     }
 }

@@ -46,6 +46,7 @@ public class Shooting {
                         flywheel.INSTANCE.runAtVelocity(velocity),
                         new SequentialGroup(
                                 blocker.INSTANCE.open,
+                                new Delay(100),
                                 feedOn(),
                                 new Delay(1000)
                         )
@@ -56,11 +57,28 @@ public class Shooting {
                         new Delay(1000)
                 ),
 
-                feedOff(),
                 flywheel.INSTANCE.stop(),
                 blocker.INSTANCE.close
         );
     }
+
+    public static Command autoShoot(double velocity) {
+        return new SequentialGroup(
+                blocker.INSTANCE.close,
+
+                new ParallelRaceGroup(
+                        flywheel.INSTANCE.runAtVelocity(velocity),
+                        new SequentialGroup(
+                                blocker.INSTANCE.open,
+                                new Delay(100),
+                                feedOn(),
+                                new Delay(1000)
+                        )
+                ),
+                blocker.INSTANCE.close
+        );
+    }
+
 
     public static Command emergencyStop() {
         return new ParallelGroup(

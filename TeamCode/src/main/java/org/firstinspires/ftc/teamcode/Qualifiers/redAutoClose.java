@@ -29,10 +29,10 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@Autonomous(name = "BLUE autonomous")
-public class blueAutoClose extends NextFTCOpMode {
+@Autonomous(name = "RED autonomous")
+public class redAutoClose extends NextFTCOpMode {
 
-    public blueAutoClose(){
+    public redAutoClose(){
         addComponents(
                 new SubsystemComponent(flywheel.INSTANCE, blocker.INSTANCE, intake.INSTANCE, uptake.INSTANCE),
                 BulkReadComponent.INSTANCE,
@@ -42,14 +42,14 @@ public class blueAutoClose extends NextFTCOpMode {
 
     private Follower follower;
 
-    private final Pose startPose = new Pose(34, 134, Math.toRadians(270)); // Start Pose of our robot.
-    private final Pose launchPose = new Pose(48, 96, Math.toRadians(-45)); // Scoring Pose of our robot.
+    private final Pose startPose = new Pose(110, 134, Math.toRadians(270)); // Start Pose of our robot.
+    private final Pose launchPose = new Pose(97, 96, Math.toRadians(45)); // Scoring Pose of our robot.
 
-    private final Pose pickup1Pose = new Pose(15, 84, Math.toRadians(180));
-    private final Pose pickup2Pose = new Pose(15, 60, Math.toRadians(180));
-    private final Pose pickup3Pose = new Pose(15, 35, Math.toRadians(180));
+    private final Pose pickup1Pose = new Pose(128, 83, Math.toRadians(0));
+    private final Pose pickup2Pose = new Pose(128, 60, Math.toRadians(0));
+    private final Pose pickup3Pose = new Pose(128, 35, Math.toRadians(0));
 
-    private final Pose offLinePose = new Pose(30, 90, Math.toRadians(0));
+    private final Pose offLinePose = new Pose(123, 96, Math.toRadians(0));
 
 
     private Path scorePreload;
@@ -63,17 +63,17 @@ public class blueAutoClose extends NextFTCOpMode {
         grabPickup1 = follower.pathBuilder()
                 .addPath(new BezierCurve(
                         launchPose,
-                        new Pose(47.19832402234638, 81.98994413407823),  // control point 1
-                        new Pose(41.99329608938548, 84.30837988826816),  // control point 2
+                        new Pose(97.82402234636871, 83.90837988826817),  // control point 1
+                        new Pose(118.70558659217876, 84.20782122905031),  // control point 2
                         pickup1Pose))
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         scorePickup1 = follower.pathBuilder()
                 .addPath(new BezierCurve(
                         pickup1Pose,
-                        new Pose(40,80),
+                        new Pose(97.75474860335194,82.48994413407821),
                         launchPose))
                 .setLinearHeadingInterpolation(pickup1Pose.getHeading(), launchPose.getHeading())
                 .build();
@@ -82,17 +82,18 @@ public class blueAutoClose extends NextFTCOpMode {
         grabPickup2 = follower.pathBuilder()
                 .addPath(new BezierCurve(
                         launchPose,
-                        new Pose(55.403910614525145, 59.727374301675965),
-                        new Pose(43.79720670391062, 57.405586592178786),
+                        new Pose(95.10111731843575, 60.623463687150846),
+                        new Pose(96.3882681564246, 58.026815642458075),
                         pickup2Pose))
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         /* This is our scorePickup2 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         scorePickup2 = follower.pathBuilder()
                 .addPath(new BezierCurve(
                         pickup2Pose,
-                        new Pose(56.93072625698324, 55.41340782122906),
+                        new Pose(97.27206703910615, 57.76201117318437),
+                        new Pose(105.68547486033518, 74.75977653631286),
                         launchPose))
                 .setLinearHeadingInterpolation(pickup2Pose.getHeading(), launchPose.getHeading())
                 .build();
@@ -100,16 +101,16 @@ public class blueAutoClose extends NextFTCOpMode {
         grabPickup3 = follower.pathBuilder()
                 .addPath(new BezierCurve(
                         launchPose,
-                        new Pose(50.996972526343754, 31.459127564739035),
-                        new Pose(53.473184357541896, 35.66536312849163),
+                        new Pose(98.8586592178771, 38.239664804469264),
+                        new Pose(91.07877094972065, 33.539106145251395),
                         pickup3Pose))
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         scorePickup3 = follower.pathBuilder()
                 .addPath(new BezierCurve(
                         pickup3Pose,
-                        new Pose(51.126256983240225, 60.05195530726257),
+                        new Pose(96.62849162011173, 63.73016759776537),
                         launchPose))
                 .setLinearHeadingInterpolation(pickup3Pose.getHeading(), launchPose.getHeading())
                 .build();
