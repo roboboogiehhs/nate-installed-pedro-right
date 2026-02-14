@@ -32,7 +32,7 @@ public class flywheel implements Subsystem {
     public Command runUntilAtSpeed(double velocity) {
         return new LambdaCommand("RunUntilAtSpeed(" + velocity + ")")
                 .setStart(() -> {
-                    currentGoalVelocity = velocity;  // ADD THIS
+                    currentGoalVelocity = velocity;
                     controlSystem.setGoal(new KineticState(0, velocity));
                 })
                 .setIsDone(() -> isAtSpeed(velocity))

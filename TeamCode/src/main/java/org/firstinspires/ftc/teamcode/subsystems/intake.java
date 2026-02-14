@@ -19,7 +19,7 @@ public class intake implements Subsystem {
                     motor.setPower(power);
                     isOn = true;
                 })
-                .setIsDone(() -> false)
+                .setIsDone(() -> true)
                 .requires(this);
     }
 
@@ -33,7 +33,7 @@ public class intake implements Subsystem {
                     motor.setPower(0);
                     isOn = false;
                 })
-                .setIsDone(() -> false)
+                .setIsDone(() -> true)
                 .requires(this);
     }
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Qualifiers;
+package org.firstinspires.ftc.teamcode.oldCode;
 
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -21,6 +21,7 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.driving.DriverControlledCommand;
 
+@Disabled
 @TeleOp(name = "RED teleop")
 public class RedQualTeleOp extends NextFTCOpMode {
 
@@ -37,7 +38,7 @@ public class RedQualTeleOp extends NextFTCOpMode {
 
     public RedQualTeleOp() {
         addComponents(
-                new SubsystemComponent(blocker.INSTANCE, flywheel.INSTANCE, intake.INSTANCE, uptake.INSTANCE),
+                new SubsystemComponent(flywheel.INSTANCE, intake.INSTANCE, uptake.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
                 new PedroComponent(Constants::createFollower)
@@ -46,7 +47,6 @@ public class RedQualTeleOp extends NextFTCOpMode {
 
     @Override
     public void onInit() {
-        blocker.INSTANCE.close.schedule();
 
         if (PoseStorage.currentPose != null) {
             PedroComponent.follower().setPose(PoseStorage.currentPose);

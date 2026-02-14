@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.Qualifiers;
+package org.firstinspires.ftc.teamcode.regionals;
 
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.PoseStorage;
@@ -20,33 +19,31 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.driving.DriverControlledCommand;
 
-@TeleOp(name = "BLUE teleop")
-public class BlueQualTeleOp extends NextFTCOpMode {
+@TeleOp(name = "RED teleop")
+public class RedRegionalsTeleOp extends NextFTCOpMode {
 
-    private static final double BLUE_GOAL_X = 13;
-    private static final double BLUE_GOAL_Y = 137;
+    private static final double RED_GOAL_X = 131;
+    private static final double RED_GOAL_Y = 137;
 
     //todo update these to play with for the regression
-    private static final double BLUE_GOAL_X_DISTANCE = 131;
-    private static final double BLUE_GOAL_Y_DISTANCE = 137;
+    private static final double RED_GOAL_X_DISTANCE = 131;
+    private static final double RED_GOAL_Y_DISTANCE = 137;
 
-    private static final Pose BLUE_AUTO_END = new Pose(30, 90, Math.toRadians(180));
-    private static final Pose BLUE_GOAL = new Pose(34, 134, Math.toRadians(270));
-    private static final Pose CENTER = new Pose(0, 0, Math.toRadians(180));
+    private static final Pose RED_AUTO_END = new Pose(114, 90, Math.toRadians(0));
+    private static final Pose RED_GOAL = new Pose(110, 134, Math.toRadians(270));
+    private static final Pose CENTER = new Pose(0, 0, Math.toRadians(0));
 
-    public BlueQualTeleOp() {
+    public RedRegionalsTeleOp() {
         addComponents(
-                new SubsystemComponent(blocker.INSTANCE, flywheel.INSTANCE, intake.INSTANCE, uptake.INSTANCE),
                 BulkReadComponent.INSTANCE,
-                BindingsComponent.INSTANCE,
-                new PedroComponent(Constants::createFollower)
+                new PedroComponent(Constants::createFollower),
+                new SubsystemComponent(flywheel.INSTANCE, intake.INSTANCE, uptake.INSTANCE),
+                BindingsComponent.INSTANCE
         );
     }
 
     @Override
     public void onInit() {
-        blocker.INSTANCE.close.schedule();
-
         if (PoseStorage.currentPose != null) {
             PedroComponent.follower().setPose(PoseStorage.currentPose);
         } else {
@@ -55,7 +52,7 @@ public class BlueQualTeleOp extends NextFTCOpMode {
 
         while (!isStarted() && !isStopRequested()) {
             Pose pose = PedroComponent.follower().getPose();
-            telemetry.addLine("BLUE AUTO");
+            telemetry.addLine("RED TELE");
             telemetry.addLine();
 
             telemetry.addData("Position", "X: %.1f, Y: %.1f, H: %.1f°",
@@ -64,11 +61,11 @@ public class BlueQualTeleOp extends NextFTCOpMode {
             telemetry.update();
 
             if (gamepad1.dpad_up) {
-                PedroComponent.follower().setPose(BLUE_AUTO_END);
+                PedroComponent.follower().setPose(RED_AUTO_END);
             } else if (gamepad1.dpad_down) {
                 PedroComponent.follower().setPose(CENTER);
             } else if (gamepad1.dpad_right) {
-                PedroComponent.follower().setPose(BLUE_GOAL);
+                PedroComponent.follower().setPose(RED_GOAL);
             }
         }
     }
@@ -90,7 +87,7 @@ public class BlueQualTeleOp extends NextFTCOpMode {
                         new LambdaCommand("Reset Heading")
                                 .setStart(() -> {
                                     Pose pose = PedroComponent.follower().getPose();
-                                    PedroComponent.follower().setPose(new Pose(pose.getX(), pose.getY(), Math.toRadians(180)));
+                                    PedroComponent.follower().setPose(new Pose(pose.getX(), pose.getY(), Math.toRadians(0)));
                                 })
                                 .setIsDone(() -> true)
                 );
@@ -112,9 +109,9 @@ public class BlueQualTeleOp extends NextFTCOpMode {
                 new LambdaCommand("Toggle Feed")
                         .setStart(() -> {
                             if (intake.INSTANCE.isOn()) {
-                                Shooting.feedOff().schedule();
+                                intake.INSTANCE.turnOff().schedule();
                             } else {
-                                Shooting.feedOn().schedule();
+                                intake.INSTANCE.turnOn().schedule();
                             }
                         })
                         .setIsDone(() -> true)
@@ -139,15 +136,15 @@ public class BlueQualTeleOp extends NextFTCOpMode {
         // DPAD UP: Reset position
         Gamepads.gamepad1().dpadUp().whenBecomesTrue(
                 new LambdaCommand("Reset Position")
-                        .setStart(() -> PedroComponent.follower().setPose(new Pose(0, 0, Math.toRadians(180))))
+                        .setStart(() -> PedroComponent.follower().setPose(new Pose(0, 0, Math.toRadians(0))))
                         .setIsDone(() -> true)
         );
     }
 
     private double calculateHeadingToGoal(Pose pose) {
-        double dx = BLUE_GOAL_X - pose.getX();
-        double dy = BLUE_GOAL_Y - pose.getY();
-        double heading = Math.atan2(dy, dx) + Math.PI;
+        double dx = RED_GOAL_X - pose.getX();
+        double dy = RED_GOAL_Y - pose.getY();
+        double heading = Math.atan2(dy, dx);
 
         // Normalize to [-PI, PI]
         while (heading > Math.PI) heading -= 2 * Math.PI;
@@ -182,8 +179,8 @@ public class BlueQualTeleOp extends NextFTCOpMode {
 
     private double getDistanceToGoal() {
         Pose pose = PedroComponent.follower().getPose();
-        double dx = BLUE_GOAL_X_DISTANCE - pose.getX();
-        double dy = BLUE_GOAL_Y_DISTANCE - pose.getY();
+        double dx = RED_GOAL_X_DISTANCE - pose.getX();
+        double dy = RED_GOAL_Y_DISTANCE - pose.getY();
         return Math.sqrt(dx * dx + dy * dy) * 0.0254;
     }
 }

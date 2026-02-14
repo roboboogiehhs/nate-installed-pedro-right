@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Qualifiers;
+package org.firstinspires.ftc.teamcode.oldCode;
 
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.Pose;
@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Shooting;
-import org.firstinspires.ftc.teamcode.subsystems.blocker;
 import org.firstinspires.ftc.teamcode.subsystems.flywheel;
 import org.firstinspires.ftc.teamcode.subsystems.intake;
 import org.firstinspires.ftc.teamcode.subsystems.uptake;
@@ -17,6 +16,7 @@ import org.firstinspires.ftc.teamcode.subsystems.uptake;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.Path;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
@@ -29,12 +29,13 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
+@Disabled
 @Autonomous(name = "RED autonomous")
 public class redAutoClose extends NextFTCOpMode {
 
     public redAutoClose(){
         addComponents(
-                new SubsystemComponent(flywheel.INSTANCE, blocker.INSTANCE, intake.INSTANCE, uptake.INSTANCE),
+                new SubsystemComponent(flywheel.INSTANCE, intake.INSTANCE, uptake.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 new PedroComponent(Constants::createFollower)
         );

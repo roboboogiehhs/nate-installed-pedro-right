@@ -14,7 +14,7 @@ public class uptake implements Subsystem {
     public Command turnOn(double power) {
         return new LambdaCommand("Uptake On")
                 .setStart(() -> motor.setPower(power))
-                .setIsDone(() -> false)
+                .setIsDone(() -> true)
                 .requires(this);
     }
 
@@ -25,7 +25,7 @@ public class uptake implements Subsystem {
     public Command turnOff() {
         return new LambdaCommand("Uptake Off")
                 .setStart(() -> motor.setPower(0))
-                .setIsDone(() -> false)
+                .setIsDone(() -> true)
                 .requires(this);
     }
 

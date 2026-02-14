@@ -8,6 +8,8 @@ import dev.nextftc.core.commands.delays.Delay;
 
 public class Shooting {
 
+
+    //todo update these for new bot
     private static final double REGRESSION_SLOPE = 439.42018;
     private static final double REGRESSION_INTERCEPT = 764.10156;
     private static final double MIN_VELOCITY = 500.0;
@@ -35,7 +37,6 @@ public class Shooting {
 
     public static Command shoot(double velocity) {
         return new SequentialGroup(
-                blocker.INSTANCE.close,
 
                 new ParallelRaceGroup(
                         flywheel.INSTANCE.runUntilAtSpeed(velocity),
@@ -45,37 +46,34 @@ public class Shooting {
                 new ParallelRaceGroup(
                         flywheel.INSTANCE.runAtVelocity(velocity),
                         new SequentialGroup(
-                                blocker.INSTANCE.open,
-                                new Delay(100),
                                 feedOn(),
-                                new Delay(1000)
+                                new Delay(500)
                         )
                 ),
 
                 new ParallelRaceGroup(
                         flywheel.INSTANCE.runAtVelocity(velocity - VELOCITY_REDUCTION),
-                        new Delay(1000)
+                        new Delay(500)
                 ),
 
-                flywheel.INSTANCE.stop(),
-                blocker.INSTANCE.close
+                new ParallelGroup(
+                        flywheel.INSTANCE.stop(),
+                        uptake.INSTANCE.turnOff()
+                )
+
         );
     }
 
     public static Command autoShoot(double velocity) {
         return new SequentialGroup(
-                blocker.INSTANCE.close,
-
                 new ParallelRaceGroup(
                         flywheel.INSTANCE.runAtVelocity(velocity),
                         new SequentialGroup(
-                                blocker.INSTANCE.open,
-                                new Delay(100),
                                 feedOn(),
-                                new Delay(1000)
+                                new Delay(2000)
                         )
                 ),
-                blocker.INSTANCE.close
+                uptake.INSTANCE.turnOff()
         );
     }
 
@@ -84,8 +82,7 @@ public class Shooting {
         return new ParallelGroup(
                 flywheel.INSTANCE.stop(),
                 intake.INSTANCE.turnOff(),
-                uptake.INSTANCE.turnOff(),
-                blocker.INSTANCE.close
+                uptake.INSTANCE.turnOff()
         );
     }
 }
