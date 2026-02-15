@@ -40,20 +40,20 @@ public class Shooting {
 
                 new ParallelRaceGroup(
                         flywheel.INSTANCE.runUntilAtSpeed(velocity),
-                        new Delay(1000)
+                        new Delay(1)
                 ),
 
                 new ParallelRaceGroup(
                         flywheel.INSTANCE.runAtVelocity(velocity),
                         new SequentialGroup(
                                 feedOn(),
-                                new Delay(500)
+                                new Delay(0.5)
                         )
                 ),
 
                 new ParallelRaceGroup(
                         flywheel.INSTANCE.runAtVelocity(velocity - VELOCITY_REDUCTION),
-                        new Delay(500)
+                        new Delay(0.5)
                 ),
 
                 new ParallelGroup(
@@ -70,7 +70,7 @@ public class Shooting {
                         flywheel.INSTANCE.runAtVelocity(velocity),
                         new SequentialGroup(
                                 feedOn(),
-                                new Delay(2000)
+                                new Delay(2)
                         )
                 ),
                 uptake.INSTANCE.turnOff()
