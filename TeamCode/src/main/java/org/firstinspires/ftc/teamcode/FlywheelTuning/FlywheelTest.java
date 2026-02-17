@@ -4,12 +4,14 @@ package org.firstinspires.ftc.teamcode.FlywheelTuning;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name = "Flywheel Test")
 public class FlywheelTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         DcMotorEx motor = hardwareMap.get(DcMotorEx.class, "flywheel");
+        motor.setDirection(DcMotorEx.Direction.REVERSE);
 
         waitForStart();
         motor.setPower(1.0);

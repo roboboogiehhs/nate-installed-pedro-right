@@ -27,7 +27,6 @@ public class RegressionFinder extends LinearOpMode{
 
         uptake = hardwareMap.get(DcMotorEx.class, "uptake");
         uptake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        uptake.setDirection(DcMotorSimple.Direction.REVERSE);
         uptake.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         flywheel = hardwareMap.get(DcMotorEx.class,"flywheel");
@@ -54,7 +53,7 @@ public class RegressionFinder extends LinearOpMode{
 
             if (gamepad1.y) {
                 intake.setPower(.8);
-                uptake.setVelocity(1500);
+                uptake.setPower(1);
             } else if (gamepad1.a) {
                 intake.setPower(0);
                 uptake.setPower(0);

@@ -11,7 +11,7 @@ public class flywheel implements Subsystem {
     public static final flywheel INSTANCE = new flywheel();
     private flywheel() { }
 
-    private MotorEx motor = new MotorEx("flywheel").reversed();
+    private MotorEx motor = new MotorEx("flywheel");
 
     private double currentGoalVelocity = 0;
     private static final double SPEED_TOL_RPM = 50;
