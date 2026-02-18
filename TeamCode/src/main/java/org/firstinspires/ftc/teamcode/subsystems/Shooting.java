@@ -21,44 +21,31 @@ public class Shooting {
         return Math.max(MIN_VELOCITY, Math.min(MAX_VELOCITY, vel));
     }
 
-    public static Command feedOn() {
-        return new ParallelGroup(
-                intake.INSTANCE.turnOn(0.8),
-                uptake.INSTANCE.turnOn(1.0)
-        );
-    }
-
-    public static Command feedOff() {
-        return new ParallelGroup(
-                intake.INSTANCE.turnOff(),
-                uptake.INSTANCE.turnOff()
-        );
-    }
-
     public static Command shoot(double velocity) {
         return new SequentialGroup(
 
                 new ParallelRaceGroup(
                         flywheel.INSTANCE.runUntilAtSpeed(velocity),
+                        servo.INSTANCE.open,
                         new Delay(1)
                 ),
 
                 new ParallelRaceGroup(
                         flywheel.INSTANCE.runAtVelocity(velocity),
                         new SequentialGroup(
-                                feedOn(),
-                                new Delay(0.5)
+                                fullIntake.on(),
+                                new Delay(1)
                         )
                 ),
 
-                new ParallelRaceGroup(
-                        flywheel.INSTANCE.runAtVelocity(velocity - VELOCITY_REDUCTION),
-                        new Delay(0.5)
-                ),
+//                new ParallelRaceGroup(
+//                        flywheel.INSTANCE.runAtVelocity(velocity - VELOCITY_REDUCTION),
+//                        new Delay(0.5)
+//                ),
 
                 new ParallelGroup(
                         flywheel.INSTANCE.stop(),
-                        uptake.INSTANCE.turnOff()
+                        servo.INSTANCE.close
                 )
 
         );
@@ -69,7 +56,7 @@ public class Shooting {
                 new ParallelRaceGroup(
                         flywheel.INSTANCE.runAtVelocity(velocity),
                         new SequentialGroup(
-                                feedOn(),
+                                fullIntake.on(),
                                 new Delay(2)
                         )
                 ),

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
@@ -16,7 +17,7 @@ import dev.nextftc.control.KineticState;
 public class FlywheelTuning extends LinearOpMode {
 
     // Set kV = 1.0 / maxVelocity from FlywheelTest
-    public static double kV = 0.00045;
+    public static double kV = 0.00041;
     public static double kP = 0.000001;
     public static double targetVelocity = 1500;
 
@@ -24,6 +25,7 @@ public class FlywheelTuning extends LinearOpMode {
     public void runOpMode() {
         DcMotorEx motor = hardwareMap.get(DcMotorEx.class, "flywheel");
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         TelemetryManager telemetryM = Panels.getTelemetry();
 

@@ -9,7 +9,8 @@ public class intake implements Subsystem {
     public static final intake INSTANCE = new intake();
     private intake() { }
 
-    private MotorEx motor = new MotorEx("intake");
+    private MotorEx motor = new MotorEx("intake")
+            .reversed();
 
     private boolean isOn = false;
 
@@ -24,7 +25,7 @@ public class intake implements Subsystem {
     }
 
     public Command turnOn() {
-        return turnOn(0.8);
+        return turnOn(1);
     }
 
     public Command turnOff() {

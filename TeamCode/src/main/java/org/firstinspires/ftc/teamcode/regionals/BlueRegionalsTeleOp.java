@@ -109,9 +109,9 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
                 new LambdaCommand("Toggle Feed")
                         .setStart(() -> {
                             if (intake.INSTANCE.isOn()) {
-                                intake.INSTANCE.turnOff().schedule();
+                                fullIntake.off();
                             } else {
-                                intake.INSTANCE.turnOn().schedule();
+                                fullIntake.on();
                             }
                         })
                         .setIsDone(() -> true)

@@ -109,9 +109,9 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
                 new LambdaCommand("Toggle Feed")
                         .setStart(() -> {
                             if (intake.INSTANCE.isOn()) {
-                                intake.INSTANCE.turnOff().schedule();
+                                fullIntake.on();
                             } else {
-                                intake.INSTANCE.turnOn().schedule();
+                                fullIntake.off();
                             }
                         })
                         .setIsDone(() -> true)
