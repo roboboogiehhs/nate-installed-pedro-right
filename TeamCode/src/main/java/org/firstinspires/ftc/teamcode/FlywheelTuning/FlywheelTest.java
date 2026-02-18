@@ -11,8 +11,7 @@ public class FlywheelTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         DcMotorEx motor = hardwareMap.get(DcMotorEx.class, "flywheel");
-        motor.setDirection(DcMotorEx.Direction.REVERSE);
-
+        motor.setDirection(DcMotorSimple.Direction.REVERSE);
         waitForStart();
         motor.setPower(1.0);
 
