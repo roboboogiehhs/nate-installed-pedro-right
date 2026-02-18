@@ -17,8 +17,8 @@ public class flywheel implements Subsystem {
     private static final double SPEED_TOL_RPM = 50;
 
     //todo Tune these
-    private static double kV = 0;
-    private static double kP = 0;
+    private static double kV = 0.00045;
+    private static double kP = 0.000001;
     private static double kI = 0;
 
     private ControlSystem controlSystem = ControlSystem.builder()
