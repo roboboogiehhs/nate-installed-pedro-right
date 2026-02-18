@@ -16,7 +16,7 @@ import dev.nextftc.control.KineticState;
 public class FlywheelTuning extends LinearOpMode {
 
     // Set kV = 1.0 / maxVelocity from FlywheelTest
-    public static double kV = 0.0005;
+    public static double kV = 0.00042372881;
     public static double kP = 0;
     public static double targetVelocity = 1500;
 
