@@ -16,7 +16,9 @@ public class Constants {
 
 
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(12.7913);
+            .mass(12.7913)
+            .forwardZeroPowerAcceleration(-36.87845)
+            .lateralZeroPowerAcceleration(-65.2857);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
@@ -27,7 +29,9 @@ public class Constants {
             .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE);
+            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .xVelocity(73.231)
+            .yVelocity(39.421);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(-5.5)
