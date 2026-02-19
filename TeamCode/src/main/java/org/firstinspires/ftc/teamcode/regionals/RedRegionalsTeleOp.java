@@ -31,42 +31,45 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
 
     private static final Pose RED_AUTO_END = new Pose(114, 90, Math.toRadians(0));
     private static final Pose RED_GOAL = new Pose(110, 134, Math.toRadians(270));
-    private static final Pose CENTER = new Pose(0, 0, Math.toRadians(0));
+    private static final Pose CENTER = new Pose(72, 72, Math.toRadians(0));
 
     public RedRegionalsTeleOp() {
         addComponents(
                 BulkReadComponent.INSTANCE,
                 new PedroComponent(Constants::createFollower),
-                new SubsystemComponent(flywheel.INSTANCE, intake.INSTANCE, uptake.INSTANCE),
+                new SubsystemComponent(flywheel.INSTANCE, intake.INSTANCE, uptake.INSTANCE, servo.INSTANCE),
                 BindingsComponent.INSTANCE
         );
     }
 
     @Override
     public void onInit() {
+        servo.INSTANCE.close().schedule();
+
         if (PoseStorage.currentPose != null) {
             PedroComponent.follower().setPose(PoseStorage.currentPose);
         } else {
             PedroComponent.follower().setPose(CENTER);  // default to start position
         }
+    }
 
-        while (!isStarted() && !isStopRequested()) {
-            Pose pose = PedroComponent.follower().getPose();
-            telemetry.addLine("RED TELE");
-            telemetry.addLine();
+    @Override
+    public void onWaitForStart() {
+        Pose pose = PedroComponent.follower().getPose();
+        telemetry.addLine("RED TELE");
+        telemetry.addLine();
 
-            telemetry.addData("Position", "X: %.1f, Y: %.1f, H: %.1f°",
-                    pose.getX(), pose.getY(), Math.toDegrees(pose.getHeading()));
-            telemetry.addLine("DPAD: UP=AutoEnd, DOWN=Center, RIGHT=Goal");
-            telemetry.update();
+        telemetry.addData("Position", "X: %.1f, Y: %.1f, H: %.1f°",
+                pose.getX(), pose.getY(), Math.toDegrees(pose.getHeading()));
+        telemetry.addLine("DPAD: UP=AutoEnd, DOWN=Center, RIGHT=Goal");
+        telemetry.update();
 
-            if (gamepad1.dpad_up) {
-                PedroComponent.follower().setPose(RED_AUTO_END);
-            } else if (gamepad1.dpad_down) {
-                PedroComponent.follower().setPose(CENTER);
-            } else if (gamepad1.dpad_right) {
-                PedroComponent.follower().setPose(RED_GOAL);
-            }
+        if (gamepad1.dpad_up) {
+            PedroComponent.follower().setPose(RED_AUTO_END);
+        } else if (gamepad1.dpad_down) {
+            PedroComponent.follower().setPose(CENTER);
+        } else if (gamepad1.dpad_right) {
+            PedroComponent.follower().setPose(RED_GOAL);
         }
     }
 
@@ -109,9 +112,9 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
                 new LambdaCommand("Toggle Feed")
                         .setStart(() -> {
                             if (intake.INSTANCE.isOn()) {
-                                fullIntake.on();
+                                fullIntake.off().schedule();
                             } else {
-                                fullIntake.off();
+                                fullIntake.on().schedule();
                             }
                         })
                         .setIsDone(() -> true)

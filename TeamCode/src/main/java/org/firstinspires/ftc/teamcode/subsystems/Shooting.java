@@ -2,9 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
-import dev.nextftc.core.commands.groups.ParallelRaceGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
-import dev.nextftc.core.commands.delays.Delay;
 
 public class Shooting {
 
@@ -14,7 +12,6 @@ public class Shooting {
     private static final double REGRESSION_INTERCEPT = 764.10156;
     private static final double MIN_VELOCITY = 500.0;
     private static final double MAX_VELOCITY = 6000.0;
-    private static final double VELOCITY_REDUCTION = 20.0;
 
     public static double calculateVelocity(double distanceMeters) {
         double vel = REGRESSION_SLOPE * distanceMeters + REGRESSION_INTERCEPT;
@@ -23,44 +20,28 @@ public class Shooting {
 
     public static Command shoot(double velocity) {
         return new SequentialGroup(
+                // 1. Open servo
+                servo.INSTANCE.open(),
 
-                new ParallelRaceGroup(
-                        flywheel.INSTANCE.runUntilAtSpeed(velocity),
-                        servo.INSTANCE.open,
-                        new Delay(1)
-                ),
+                // 2. Spin flywheel up to speed (max 1s timeout)
+                flywheel.INSTANCE.runUntilAtSpeedOrTimeout(velocity, 3.0),
 
-                new ParallelRaceGroup(
-                        flywheel.INSTANCE.runAtVelocity(velocity),
-                        new SequentialGroup(
-                                fullIntake.on(),
-                                new Delay(1)
-                        )
-                ),
+                // 3. Turn on intake then run flywheel for 1s while balls feed
+                fullIntake.on(),
+                flywheel.INSTANCE.runForDuration(velocity, 3.0),
 
-//                new ParallelRaceGroup(
-//                        flywheel.INSTANCE.runAtVelocity(velocity - VELOCITY_REDUCTION),
-//                        new Delay(0.5)
-//                ),
-
-                new ParallelGroup(
-                        flywheel.INSTANCE.stop(),
-                        servo.INSTANCE.close
-                )
-
+                // 4. Stop everything and close
+                fullIntake.off(),
+                flywheel.INSTANCE.stopImmediate(),
+                servo.INSTANCE.close()
         );
     }
 
     public static Command autoShoot(double velocity) {
         return new SequentialGroup(
-                new ParallelRaceGroup(
-                        flywheel.INSTANCE.runAtVelocity(velocity),
-                        new SequentialGroup(
-                                fullIntake.on(),
-                                new Delay(2)
-                        )
-                ),
-                uptake.INSTANCE.turnOff()
+                fullIntake.on(),
+                flywheel.INSTANCE.runForDuration(velocity, 2.0),
+                fullIntake.off()
         );
     }
 
