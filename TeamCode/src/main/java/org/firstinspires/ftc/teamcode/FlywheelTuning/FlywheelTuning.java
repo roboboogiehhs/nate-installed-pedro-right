@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.FlywheelTuning;
 
-import com.bylazar.ftcontrol.panels.Panels;
-import com.bylazar.ftcontrol.panels.configurables.annotations.Configurable;
-import com.bylazar.ftcontrol.panels.integration.TelemetryManager;
+import com.bylazar.panels.Panels;
+import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,10 +12,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
 
-@TeleOp(name = "Flywheel Tuning")
-@Configurable
-public class FlywheelTuning extends LinearOpMode {
 
+public abstract class FlywheelTuning extends LinearOpMode {
+/*
     // Set kV = 1.0 / maxVelocity from FlywheelTest
     public static double kV = 0.00041;
     public static double kP = 0.000001;
@@ -56,4 +55,6 @@ public class FlywheelTuning extends LinearOpMode {
             telemetryM.update(telemetry);
         }
     }
+
+ */
 }
