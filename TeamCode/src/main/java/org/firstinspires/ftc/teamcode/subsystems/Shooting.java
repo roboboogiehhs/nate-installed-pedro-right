@@ -26,7 +26,7 @@ public class Shooting {
                 servo.INSTANCE.open(),
 
                 // 2. Spin flywheel up to speed (max 1s timeout)
-                flywheel.INSTANCE.runUntilAtSpeedOrTimeout(velocity, 1.0),
+                flywheel.INSTANCE.runUntilAtSpeedOrTimeout(velocity, 2.0),
 
                 // 3. Turn on intake then run flywheel for 1s while balls feed
                 fullIntake.on(),
