@@ -46,6 +46,8 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
     public void onInit() {
         servo.INSTANCE.close().schedule();
 
+        servo.INSTANCE.close().schedule();
+
         if (PoseStorage.currentPose != null) {
             PedroComponent.follower().setPose(PoseStorage.currentPose);
         } else {
@@ -79,7 +81,7 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
         DriverControlledCommand driverControlled = new PedroDriverControlled(
                 Gamepads.gamepad1().leftStickY(),
                 Gamepads.gamepad1().leftStickX(),
-                Gamepads.gamepad1().rightStickX().negate(),
+                Gamepads.gamepad1().rightStickX().map(value -> -value * 0.7),
                 false
         );
         driverControlled.schedule();

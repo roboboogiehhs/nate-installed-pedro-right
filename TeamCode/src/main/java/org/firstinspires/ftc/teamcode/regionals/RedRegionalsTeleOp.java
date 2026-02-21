@@ -77,9 +77,9 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
     public void onStartButtonPressed() {
         // Field centric driving
         DriverControlledCommand driverControlled = new PedroDriverControlled(
-                Gamepads.gamepad1().leftStickY(),
-                Gamepads.gamepad1().leftStickX(),
-                Gamepads.gamepad1().rightStickX(),
+                Gamepads.gamepad1().leftStickY().negate(),
+                Gamepads.gamepad1().leftStickX().negate(),
+                Gamepads.gamepad1().rightStickX().map(value -> -value * 0.7),
                 false
         );
         driverControlled.schedule();

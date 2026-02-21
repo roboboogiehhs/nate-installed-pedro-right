@@ -20,18 +20,19 @@ public class Shooting {
 
     public static Command shoot(double velocity) {
         return new SequentialGroup(
-                // 1. Open servo
+
+                // 1. Shut off intake and o pen servo
+                fullIntake.off(),
                 servo.INSTANCE.open(),
 
                 // 2. Spin flywheel up to speed (max 1s timeout)
-                flywheel.INSTANCE.runUntilAtSpeedOrTimeout(velocity, 3.0),
+                flywheel.INSTANCE.runUntilAtSpeedOrTimeout(velocity, 1.0),
 
                 // 3. Turn on intake then run flywheel for 1s while balls feed
                 fullIntake.on(),
-                flywheel.INSTANCE.runForDuration(velocity, 3.0),
+                flywheel.INSTANCE.runForDuration(velocity, 1.5),
 
                 // 4. Stop everything and close
-                fullIntake.off(),
                 flywheel.INSTANCE.stopImmediate(),
                 servo.INSTANCE.close()
         );
