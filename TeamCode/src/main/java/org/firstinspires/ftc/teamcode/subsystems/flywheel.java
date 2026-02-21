@@ -66,6 +66,10 @@ public class flywheel implements Subsystem {
         return Math.abs(currentVelocity - targetVelocity) <= SPEED_TOLERANCE;
     }
 
+    public void setTargetVelocity(double velocity) {
+        currentGoalVelocity = velocity;
+    }
+
     public double getGoalVelocity() {
         return currentGoalVelocity;
     }

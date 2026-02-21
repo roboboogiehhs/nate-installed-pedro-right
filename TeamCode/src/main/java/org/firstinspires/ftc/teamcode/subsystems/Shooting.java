@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 
@@ -45,6 +46,16 @@ public class Shooting {
         );
     }
 
+
+    public static Command feedAndShoot() {
+        return new SequentialGroup(
+                fullIntake.off(),
+                servo.INSTANCE.open(),
+                fullIntake.on(),
+                new Delay(1.0),
+                servo.INSTANCE.close()
+        );
+    }
 
     public static Command emergencyStop() {
         return new ParallelGroup(

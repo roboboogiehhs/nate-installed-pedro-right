@@ -29,6 +29,8 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
     private static final double BLUE_GOAL_X_DISTANCE = 13;
     private static final double BLUE_GOAL_Y_DISTANCE = 137;
 
+    private boolean flywheelActive = false;
+
     private static final Pose BLUE_AUTO_END = new Pose(30, 90, Math.toRadians(180));
     private static final Pose BLUE_GOAL = new Pose(34, 134, Math.toRadians(270));
     private static final Pose CENTER = new Pose(72, 72, Math.toRadians(180));
@@ -97,14 +99,22 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
                 );
 
 
-        // RIGHT BUMPER: Shoot
-        Gamepads.gamepad1().rightBumper().whenBecomesTrue(
-                new LambdaCommand("Calculate and Shoot")
+        // RIGHT TRIGGER: Toggle flywheel
+        Gamepads.gamepad1().rightTrigger().greaterThan(0.5).whenBecomesTrue(
+                new LambdaCommand("Toggle Flywheel")
                         .setStart(() -> {
-                            double distance = getDistanceToGoal();
-                            double velocity = Shooting.calculateVelocity(distance);
-                            Shooting.shoot(velocity).schedule();
+                            flywheelActive = !flywheelActive;
+                            if (!flywheelActive) {
+                                flywheel.INSTANCE.setTargetVelocity(0);
+                            }
                         })
+                        .setIsDone(() -> true)
+        );
+
+        // RIGHT BUMPER: Feed and shoot
+        Gamepads.gamepad1().rightBumper().whenBecomesTrue(
+                new LambdaCommand("Feed and Shoot")
+                        .setStart(() -> Shooting.feedAndShoot().schedule())
                         .setIsDone(() -> true)
         );
 
@@ -135,7 +145,14 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
         );
 
         // B BUTTON: Emergency stop
-        Gamepads.gamepad1().b().whenBecomesTrue(Shooting.emergencyStop());
+        Gamepads.gamepad1().b().whenBecomesTrue(
+                new LambdaCommand("Emergency Stop")
+                        .setStart(() -> {
+                            flywheelActive = false;
+                            Shooting.emergencyStop().schedule();
+                        })
+                        .setIsDone(() -> true)
+        );
 
         // DPAD UP: Reset position
         Gamepads.gamepad1().dpadUp().whenBecomesTrue(
@@ -163,7 +180,13 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
         double distance = getDistanceToGoal();
         double calculatedVelocity = Shooting.calculateVelocity(distance);
 
+        if (flywheelActive) {
+            double velocity = Shooting.calculateVelocity(distance);
+            flywheel.INSTANCE.setTargetVelocity(velocity);
+        }
+
         telemetry.addLine("=== SHOOTING ===");
+        telemetry.addData("Flywheel", flywheelActive ? "ACTIVE" : "OFF");
         telemetry.addData("Distance to Goal", "%.2f m", distance);
         telemetry.addData("Calculated Velocity", "%.0f", calculatedVelocity);
         telemetry.addData("Current Velocity", "%.0f", flywheel.INSTANCE.getCurrentVelocity());
@@ -177,8 +200,8 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
         telemetry.addData("Heading", "%.1f°", Math.toDegrees(pose.getHeading()));
         telemetry.addLine();
         telemetry.addLine("=== CONTROLS ===");
-        telemetry.addLine("LB: Toggle Intake | RB: Shoot");
-        telemetry.addLine("B: Emergency Stop | DPAD_UP: Reset Pos");
+        telemetry.addLine("RT: Toggle Flywheel | RB: Shoot");
+        telemetry.addLine("LB: Toggle Intake | B: Emergency Stop");
         telemetry.addData("Intake", intake.INSTANCE.isOn() ? "ON" : "OFF");
         telemetry.update();
     }
