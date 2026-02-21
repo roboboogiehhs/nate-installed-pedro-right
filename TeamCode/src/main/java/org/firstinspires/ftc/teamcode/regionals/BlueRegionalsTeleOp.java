@@ -48,6 +48,8 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
     public void onInit() {
         servo.INSTANCE.close().schedule();
 
+        servo.INSTANCE.close().schedule();
+
         if (PoseStorage.currentPose != null) {
             PedroComponent.follower().setPose(PoseStorage.currentPose);
         } else {
