@@ -52,8 +52,9 @@ public class Shooting {
         return new SequentialGroup(
                 fullIntake.off(),
                 servo.INSTANCE.open(),
+                new Delay(.5),
                 fullIntake.on(),
-                new Delay(1.0),
+                new Delay(1.5),
                 servo.INSTANCE.close()
         );
     }
