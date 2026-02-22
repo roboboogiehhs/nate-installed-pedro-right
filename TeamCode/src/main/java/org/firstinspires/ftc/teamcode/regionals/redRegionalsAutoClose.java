@@ -46,7 +46,7 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
     private final Pose launchPose = new Pose(90, 90, Math.toRadians(45)); // Scoring Pose of our robot.
 
     private final Pose pickupRow2 = new Pose(131, 59, Math.toRadians(0));
-    private final Pose pickupClassifier = new Pose(137, 59, Math.toRadians(90));
+    private final Pose pickupClassifier = new Pose(137, 59, Math.toRadians(25));
     private final Pose pickupRow1 = new Pose(132, 84, Math.toRadians(0));
     private final Pose pickupRow3 = new Pose(132, 35, Math.toRadians(0));
 
