@@ -41,9 +41,14 @@ public class Shooting {
 
     public static Command autoShoot(double velocity) {
         return new SequentialGroup(
+                new ParallelGroup(
+                        fullIntake.off(),
+                        servo.INSTANCE.open()
+                ),
+                new Delay(0.3),
                 fullIntake.on(),
-                flywheel.INSTANCE.runForDuration(velocity, 2.0),
-                fullIntake.off()
+                new Delay(0.5),
+                servo.INSTANCE.close()
         );
     }
 
