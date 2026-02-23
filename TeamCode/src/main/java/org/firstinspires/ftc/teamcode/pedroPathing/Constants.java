@@ -21,9 +21,15 @@ public class Constants {
             .mass(12.7913)
             .forwardZeroPowerAcceleration(-36.87845)
             .lateralZeroPowerAcceleration(-65.2857)
+           /* Our Constants
             .translationalPIDFCoefficients(new PIDFCoefficients(0.07,0,0,0))
             .headingPIDFCoefficients(new PIDFCoefficients(0,0.01,0,1.2))
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.007,0,0.00001,0.6,0.01))
+            */
+            //Innovo's Constants
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.08, 0, 0.001, 0.02))
+            .headingPIDFCoefficients(new PIDFCoefficients(1.1, 0, 0.00045, 0.00))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.05,0.0,0.0001,0.6,0.0))
             .centripetalScaling(0.0006);
 
     public static MecanumConstants driveConstants = new MecanumConstants()

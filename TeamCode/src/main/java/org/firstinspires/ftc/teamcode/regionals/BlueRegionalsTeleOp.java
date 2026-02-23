@@ -159,7 +159,7 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
         // DPAD UP: Reset position
         Gamepads.gamepad1().dpadUp().whenBecomesTrue(
                 new LambdaCommand("Reset Position")
-                        .setStart(() -> PedroComponent.follower().setPose(new Pose(0, 0, Math.toRadians(180))))
+                        .setStart(() -> PedroComponent.follower().setPose(new Pose(72, 72, Math.toRadians(180))))
                         .setIsDone(() -> true)
         );
     }
