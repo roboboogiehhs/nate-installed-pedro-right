@@ -26,7 +26,7 @@ public class FunnelCakeAuto extends NextFTCOpMode {
 
     Pose startPose = new Pose(123, 124, Math.toRadians(38));
     Pose shootPose = new Pose(92.63381437778962, 93.62769540746923, Math.toRadians(38));
-    Pose endPose = new Pose(124, 99, Math.toRadians(90));
+    Pose endPose = new Pose(72, 72, Math.toRadians(90));
 
     PathChain ScorePreload;
     PathChain Leave;
