@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.regionals;
 
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.PoseStorage;
@@ -30,6 +28,7 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
     private static final double RED_GOAL_Y_DISTANCE = 137;
 
     private boolean flywheelActive = false;
+    private double targetHeading = 0;
 
     private static final Pose RED_AUTO_END = new Pose(114, 90, Math.toRadians(0));
     private static final Pose RED_GOAL = new Pose(110, 134, Math.toRadians(270));
@@ -134,13 +133,20 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
                 new LambdaCommand("Turn to Goal")
                         .setStart(() -> {
                             Pose pose = PedroComponent.follower().getPose();
-                            double targetHeading = calculateHeadingToGoal(pose);
-
-                            Path turnPath = new Path(new BezierLine(pose, pose));
-                            turnPath.setLinearHeadingInterpolation(pose.getHeading(), targetHeading);
-                            PedroComponent.follower().followPath(turnPath);
+                            targetHeading = calculateHeadingToGoal(pose);
+                            PedroComponent.follower().holdPoint(new Pose(pose.getX(), pose.getY(), targetHeading));
                         })
-                        .setIsDone(() -> !PedroComponent.follower().isBusy())
+                        .setIsDone(() -> {
+                            double current = PedroComponent.follower().getPose().getHeading();
+                            double diff = targetHeading - current;
+                            while (diff > Math.PI) diff -= 2 * Math.PI;
+                            while (diff < -Math.PI) diff += 2 * Math.PI;
+                            return Math.abs(diff) < Math.toRadians(5);
+                        })
+                        .setStop((interrupted) -> {
+                            PedroComponent.follower().breakFollowing();
+                            PedroComponent.follower().startTeleopDrive();
+                        })
         );
 
         // B BUTTON: Emergency stop
