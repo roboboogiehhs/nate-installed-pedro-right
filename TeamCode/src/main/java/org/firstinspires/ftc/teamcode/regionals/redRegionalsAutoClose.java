@@ -32,7 +32,7 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
         );
     }
 
-    Pose startPose = new Pose(110, 134, Math.toRadians(270));
+    Pose startPose = new Pose(121, 125, Math.toRadians(215));
     Pose launchPose = new Pose(90, 90, Math.toRadians(45));
     Pose pickupRow2 = new Pose(131, 59, Math.toRadians(0));
     Pose pickupClassifier = new Pose(137, 59, Math.toRadians(25));
