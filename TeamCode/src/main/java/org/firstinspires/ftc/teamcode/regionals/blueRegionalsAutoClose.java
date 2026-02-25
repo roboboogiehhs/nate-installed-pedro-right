@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.intake;
 import org.firstinspires.ftc.teamcode.subsystems.uptake;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -32,7 +33,7 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         );
     }
 
-    Pose startPose = new Pose(34, 134, Math.toRadians(270));
+    Pose startPose = new Pose(33, 133, Math.toRadians(270));
     Pose launchPose = new Pose(54, 90, Math.toRadians(135));
     Pose pickupRow2 = new Pose(13, 59, Math.toRadians(180));
     Pose pickupClassifier = new Pose(7, 59, Math.toRadians(155));
@@ -114,22 +115,27 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         return new SequentialGroup(
                 new FollowPath(scorePreload),
                 Shooting.autoShoot(1230),
+                new Delay(0.2),
 
                 new FollowPath(grabRow2),
                 new FollowPath(scoreRow2),
                 Shooting.autoShoot(1230),
+                new Delay(0.2),
 
                 new FollowPath(grabClassifier),
                 new FollowPath(scoreClassifier),
                 Shooting.autoShoot(1230),
+                new Delay(0.2),
 
                 new FollowPath(grabRow1),
                 new FollowPath(scoreRow1),
                 Shooting.autoShoot(1230),
+                new Delay(0.2),
 
                 new FollowPath(grabRow3),
                 new FollowPath(scoreRow3),
                 Shooting.autoShoot(1230),
+                new Delay(0.2),
 
                 new FollowPath(offLine),
 
