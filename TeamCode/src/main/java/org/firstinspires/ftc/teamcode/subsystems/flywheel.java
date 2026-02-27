@@ -85,6 +85,14 @@ public class flywheel implements Subsystem {
     public Command runAtVelocity(double velocity) {
         return new LambdaCommand("RunAtVelocity(" + velocity + ")")
                 .setStart(() -> currentGoalVelocity = velocity)
+                .setIsDone(() -> false)
+                .requires(this);
+    }
+
+    // Run forever until stop
+    public Command runAtVelocityAuto(double velocity) {
+        return new LambdaCommand("RunAtVelocity(" + velocity + ")")
+                .setStart(() -> currentGoalVelocity = velocity)
                 .setIsDone(() -> true)
                 .requires(this);
     }

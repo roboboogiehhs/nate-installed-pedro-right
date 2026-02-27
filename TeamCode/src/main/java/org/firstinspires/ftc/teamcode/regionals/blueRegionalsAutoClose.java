@@ -109,7 +109,7 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         return new SequentialGroup(
                 new ParallelGroup(
                         new FollowPath(scorePreload),
-                        flywheel.INSTANCE.runAtVelocity(1230)
+                        flywheel.INSTANCE.runAtVelocityAuto(1230)
                 ),
                 Shooting.autoShoot(),
 
@@ -118,6 +118,7 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
                 Shooting.autoShoot(),
 
                 new FollowPath(grabClassifier),
+                new Delay(1.5),
                 new FollowPath(scoreClassifier),
                 Shooting.autoShoot(),
 
