@@ -35,11 +35,11 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
     Pose startPose = new Pose(33, 133, Math.toRadians(270));
     Pose launchPose = new Pose(54, 90, Math.toRadians(135));
     Pose pickupRow2 = new Pose(12, 47, Math.toRadians(180));
-    Pose pickupClassifier = new Pose(13, 55, Math.toRadians(155));
+    Pose pickupClassifier = new Pose(13, 56, Math.toRadians(155));
     Pose pickupRow1 = new Pose(12, 76, Math.toRadians(180));
     Pose pickupRow3 = new Pose(12, 27, Math.toRadians(180));
-    Pose offLineLaunch = new Pose(55, 91, Math.toRadians(140));
-    Pose offLineTurn = new Pose(55, 91, Math.toRadians(0));
+    Pose offLineLaunch = new Pose(56, 92, Math.toRadians(140));
+    Pose offLineTurn = new Pose(56, 102, Math.toRadians(180));
 
     PathChain scorePreload;
     PathChain grabRow2;
