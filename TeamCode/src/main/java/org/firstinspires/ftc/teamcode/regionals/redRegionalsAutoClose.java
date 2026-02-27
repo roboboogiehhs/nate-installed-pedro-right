@@ -103,19 +103,19 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
     public Command run() {
         return new SequentialGroup(
                 new FollowPath(scorePreload),
-                Shooting.autoShoot(1230),
+                Shooting.autoShoot(),
                 new FollowPath(grabRow2),
                 new FollowPath(scoreRow2),
-                Shooting.autoShoot(1230),
+                Shooting.autoShoot(),
                 new FollowPath(grabClassifier),
                 new FollowPath(scoreClassifier),
-                Shooting.autoShoot(1230),
+                Shooting.autoShoot(),
                 new FollowPath(grabRow1),
                 new FollowPath(scoreRow1),
-                Shooting.autoShoot(1230),
+                Shooting.autoShoot(),
                 new FollowPath(grabRow3),
                 new FollowPath(scoreRow3),
-                Shooting.autoShoot(1230),
+                Shooting.autoShoot(),
                 new FollowPath(offLine),
                 new LambdaCommand("Save Pose")
                         .setStart(() -> PoseStorage.currentPose = PedroComponent.follower().getPose())

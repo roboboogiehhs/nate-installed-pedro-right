@@ -39,15 +39,15 @@ public class Shooting {
         );
     }
 
-    public static Command autoShoot(double velocity) {
+    public static Command autoShoot() {
         return new SequentialGroup(
                 new ParallelGroup(
                         fullIntake.off(),
                         servo.INSTANCE.open()
                 ),
-                new Delay(0.3),
-                fullIntake.on(),
                 new Delay(0.5),
+                fullIntake.on(),
+                new Delay(1.5),
                 servo.INSTANCE.close()
         );
     }

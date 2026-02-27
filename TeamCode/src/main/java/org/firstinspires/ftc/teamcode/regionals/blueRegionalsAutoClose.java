@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.servo;
 import org.firstinspires.ftc.teamcode.subsystems.uptake;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -31,13 +32,12 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         );
     }
 
-    Pose startPose = new Pose(23, 125, Math.toRadians(325));
-    //Pose startPose = new Pose(33, 133, Math.toRadians(270));
+    Pose startPose = new Pose(33, 133, Math.toRadians(270));
     Pose launchPose = new Pose(54, 90, Math.toRadians(135));
-    Pose pickupRow2 = new Pose(13, 59, Math.toRadians(180));
-    Pose pickupClassifier = new Pose(7, 59, Math.toRadians(155));
-    Pose pickupRow1 = new Pose(12, 84, Math.toRadians(180));
-    Pose pickupRow3 = new Pose(12, 35, Math.toRadians(180));
+    Pose pickupRow2 = new Pose(12, 47, Math.toRadians(180));
+    Pose pickupClassifier = new Pose(13, 54, Math.toRadians(155));
+    Pose pickupRow1 = new Pose(12, 78, Math.toRadians(180));
+    Pose pickupRow3 = new Pose(12, 29, Math.toRadians(180));
     Pose offLineLaunch = new Pose(66, 99, Math.toRadians(140));
     Pose offLineTurn = new Pose(66, 99, Math.toRadians(0));
 
@@ -107,29 +107,27 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
 
     public Command run() {
         return new SequentialGroup(
-                new FollowPath(scorePreload),
-                Shooting.autoShoot(1230),
-                new Delay(0.2),
+                new ParallelGroup(
+                        new FollowPath(scorePreload),
+                        flywheel.INSTANCE.runAtVelocity(1230)
+                ),
+                Shooting.autoShoot(),
 
                 new FollowPath(grabRow2),
                 new FollowPath(scoreRow2),
-                Shooting.autoShoot(1230),
-                new Delay(0.2),
+                Shooting.autoShoot(),
 
                 new FollowPath(grabClassifier),
                 new FollowPath(scoreClassifier),
-                Shooting.autoShoot(1230),
-                new Delay(0.2),
+                Shooting.autoShoot(),
 
                 new FollowPath(grabRow1),
                 new FollowPath(scoreRow1),
-                Shooting.autoShoot(1230),
-                new Delay(0.2),
+                Shooting.autoShoot(),
 
                 new FollowPath(grabRow3),
                 new FollowPath(scoreRow3),
-                Shooting.autoShoot(1230),
-                new Delay(0.2),
+                Shooting.autoShoot(),
 
                 new FollowPath(offLine),
                 new LambdaCommand("Save Pose")
