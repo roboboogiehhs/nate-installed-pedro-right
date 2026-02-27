@@ -18,10 +18,10 @@ public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(12.7913)
             .forwardZeroPowerAcceleration(-30.64480495695073)
-            .lateralZeroPowerAcceleration(-60.68083916383444)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.07,0,0.001,0.025))
-            .headingPIDFCoefficients(new PIDFCoefficients(0.4,0,0.01,0.025))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.004,0,0.0001,0.6,0.025));
+            .lateralZeroPowerAcceleration(-60.68083916383444);
+//            .translationalPIDFCoefficients(new PIDFCoefficients(0.07,0,0.001,0.025))
+//            .headingPIDFCoefficients(new PIDFCoefficients(0.4,0,0.01,0.025))
+//            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.004,0,0.0001,0.6,0.025));
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(5.3)
