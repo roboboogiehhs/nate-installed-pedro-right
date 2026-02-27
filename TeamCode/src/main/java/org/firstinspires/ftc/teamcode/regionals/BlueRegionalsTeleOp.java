@@ -137,7 +137,7 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
                         .setStart(() -> {
                             Pose pose = PedroComponent.follower().getPose();
                             targetHeading = calculateHeadingToGoal(pose);
-                            PedroComponent.follower().holdPoint(new Pose(pose.getX(), pose.getY(), targetHeading));
+                            PedroComponent.follower().turnTo(targetHeading);
                         })
                         .setIsDone(() -> {
                             double current = PedroComponent.follower().getPose().getHeading();
