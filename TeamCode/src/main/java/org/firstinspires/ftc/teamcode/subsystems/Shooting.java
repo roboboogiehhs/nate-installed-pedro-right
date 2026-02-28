@@ -10,8 +10,8 @@ public class Shooting {
 
 
     //todo update these for new bot
-    private static final double REGRESSION_SLOPE = 439.42018;
-    private static final double REGRESSION_INTERCEPT = 764.10156;
+    private static final double REGRESSION_SLOPE = 6.06833;
+    private static final double REGRESSION_INTERCEPT = 983.06761;
     private static final double MIN_VELOCITY = 500.0;
     private static final double MAX_VELOCITY = 6000.0;
 
