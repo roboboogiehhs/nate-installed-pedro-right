@@ -4,6 +4,7 @@ import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.LambdaCommand;
 
 public class Shooting {
 
@@ -40,6 +41,7 @@ public class Shooting {
     }
 
     public static Command autoShoot() {
+        final double[] originalVelocity = {0};
         return new SequentialGroup(
                 new ParallelGroup(
                         fullIntake.off(),
@@ -48,10 +50,17 @@ public class Shooting {
                 new Delay(0.5),
                 fullIntake.on(),
                 new Delay(1),
-                //increase flywheel velocity by 20
+                new LambdaCommand("IncreaseFlywheelVelocity")
+                        .setStart(() -> {
+                            originalVelocity[0] = flywheel.INSTANCE.getGoalVelocity();
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 20);
+                        })
+                        .setIsDone(() -> true),
                 new Delay(0.5),
-                servo.INSTANCE.close()
-                //set flywheel velocity back to original
+                servo.INSTANCE.close(),
+                new LambdaCommand("RestoreFlywheelVelocity")
+                        .setStart(() -> flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]))
+                        .setIsDone(() -> true)
         );
     }
 
