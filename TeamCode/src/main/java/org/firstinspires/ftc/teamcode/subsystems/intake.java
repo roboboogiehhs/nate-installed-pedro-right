@@ -25,7 +25,7 @@ public class intake implements Subsystem {
     }
 
     public Command turnOn() {
-        return turnOn(.7);
+        return turnOn(.8);
     }
 
     public Command turnOff() {
