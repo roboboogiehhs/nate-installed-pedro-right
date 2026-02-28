@@ -108,9 +108,10 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
     public Command run() {
         return new SequentialGroup(
                 new ParallelGroup(
-                        new FollowPath(scorePreload),
-                        flywheel.INSTANCE.runAtVelocityAuto(1230)
+                        flywheel.INSTANCE.runAtVelocityAuto(1500),
+                        new FollowPath(scorePreload)
                 ),
+
                 Shooting.autoShoot(),
 
                 new FollowPath(grabRow2),
@@ -140,6 +141,8 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
     @Override
     public void onInit() {
         PedroComponent.follower().setStartingPose(startPose);
+        servo.INSTANCE.close().schedule();
+
         buildPaths();
     }
 
