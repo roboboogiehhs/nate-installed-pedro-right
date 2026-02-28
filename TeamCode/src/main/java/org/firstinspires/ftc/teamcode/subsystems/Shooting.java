@@ -47,8 +47,11 @@ public class Shooting {
                 ),
                 new Delay(0.5),
                 fullIntake.on(),
-                new Delay(1.5),
+                new Delay(1),
+                //increase flywheel velocity by 20
+                new Delay(0.5),
                 servo.INSTANCE.close()
+                //set flywheel velocity back to original
         );
     }
 

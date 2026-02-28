@@ -28,7 +28,7 @@ public class uptake implements Subsystem {
     }
 
     public Command turnOn() {
-        return turnOn(1400);
+        return turnOn(525);
     }
 
     public Command turnOff() {

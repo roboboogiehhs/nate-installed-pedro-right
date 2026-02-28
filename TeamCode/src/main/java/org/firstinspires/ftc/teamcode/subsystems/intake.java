@@ -33,7 +33,7 @@ public class intake implements Subsystem {
     }
 
     public Command turnOn() {
-        return turnOn(2400);
+        return turnOn(950);
     }
 
     public Command turnOff() {

@@ -32,7 +32,7 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         );
     }
 
-    Pose startPose = new Pose(33, 133, Math.toRadians(270));
+    Pose startPose = new Pose(33, 133, Math.toRadians(90));
     Pose launchPose = new Pose(54, 90, Math.toRadians(135));
     Pose pickupRow2 = new Pose(12, 47, Math.toRadians(180));
     Pose pickupClassifier = new Pose(13, 56, Math.toRadians(155));
@@ -109,7 +109,7 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         return new SequentialGroup(
                 flywheel.INSTANCE.stop(),
                 new ParallelGroup(
-                        flywheel.INSTANCE.runAtVelocityAuto(1270),
+                        flywheel.INSTANCE.runAtVelocityAuto(1250),
                         new FollowPath(scorePreload)
                 ),
 
