@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.subsystems.Subsystem;
@@ -18,7 +19,7 @@ public class intake implements Subsystem {
     @Override
     public void initialize() {
         motor = ActiveOpMode.hardwareMap().get(DcMotorEx.class, "intake");
-        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
@@ -33,7 +34,7 @@ public class intake implements Subsystem {
     }
 
     public Command turnOn() {
-        return turnOn(950);
+        return turnOn(-950);
     }
 
     public Command turnOff() {
