@@ -1,21 +1,27 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.subsystems.Subsystem;
-import dev.nextftc.hardware.impl.MotorEx;
+import dev.nextftc.ftc.ActiveOpMode;
 
 public class flywheel implements Subsystem {
     public static final flywheel INSTANCE = new flywheel();
     private flywheel() { }
 
-    private MotorEx motor = new MotorEx("flywheel").reversed();
+    private DcMotorEx motor;
 
     private double currentGoalVelocity = 0;
     private static final double SPEED_TOLERANCE = 200;
 
-    private static double kV = 0.00041;
-    private static double kP = 0.000001;
+    @Override
+    public void initialize() {
+        motor = ActiveOpMode.hardwareMap().get(DcMotorEx.class, "flywheel");
+        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -56,13 +62,13 @@ public class flywheel implements Subsystem {
 
     // Check against current goal
     public boolean isAtSpeed() {
-        double currentVelocity = motor.getState().getVelocity();
+        double currentVelocity = motor.getVelocity();
         return Math.abs(currentVelocity - currentGoalVelocity) <= SPEED_TOLERANCE;
     }
 
     // Check against specific velocity
     public boolean isAtSpeed(double targetVelocity) {
-        double currentVelocity = motor.getState().getVelocity();
+        double currentVelocity = motor.getVelocity();
         return Math.abs(currentVelocity - targetVelocity) <= SPEED_TOLERANCE;
     }
 
@@ -76,7 +82,7 @@ public class flywheel implements Subsystem {
 
     // For telemetry
     public double getCurrentVelocity() {
-        return motor.getState().getVelocity();
+        return motor.getVelocity();
     }
 
     /*----------------------------------------------------------------------------------------------------------------------------------*/
@@ -111,17 +117,8 @@ public class flywheel implements Subsystem {
 
     /*----------------------------------------------------------------------------------------------------------------------------------*/
 
-    private double lastPower = 0;
-
-    public double getLastPower() {
-        return lastPower;
-    }
-
     @Override
     public void periodic() {
-        double currentVelocity = motor.getState().getVelocity();
-        double error = currentGoalVelocity - currentVelocity;
-        lastPower = kV * currentGoalVelocity + kP * error;
-        motor.setPower(lastPower);
+        motor.setVelocity(currentGoalVelocity);
     }
 }
