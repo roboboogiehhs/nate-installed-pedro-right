@@ -109,7 +109,7 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         return new SequentialGroup(
                 flywheel.INSTANCE.stop(),
                 new ParallelGroup(
-                        flywheel.INSTANCE.runAtVelocityAuto(1500),
+                        flywheel.INSTANCE.runAtVelocityAuto(1270),
                         new FollowPath(scorePreload)
                 ),
 

@@ -199,7 +199,6 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
         telemetry.addData("Calculated Velocity", "%.0f", calculatedVelocity);
         telemetry.addData("Current Velocity", "%.0f", flywheel.INSTANCE.getCurrentVelocity());
         telemetry.addData("At Speed", flywheel.INSTANCE.isAtSpeed() ? "YES" : "NO");
-        telemetry.addData("Motor Power", "%.4f", flywheel.INSTANCE.getLastPower());
         telemetry.addData("Goal Velocity", "%.0f", flywheel.INSTANCE.getGoalVelocity());
         telemetry.addLine();
         telemetry.addLine("=== POSITION ===");

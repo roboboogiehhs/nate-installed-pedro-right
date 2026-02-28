@@ -65,6 +65,7 @@ public class RegressionFinder extends LinearOpMode{
             telemetry.addLine("Target RPM:" + targetRpm);
             telemetry.addLine("Actual RPM:" + flywheel.getVelocity());
             telemetry.addLine("Uptake RPM:" + uptake.getVelocity());
+            telemetry.addLine("Intake RPM:" + intake.getVelocity());
             telemetry.update();
 
             // Update previous button states

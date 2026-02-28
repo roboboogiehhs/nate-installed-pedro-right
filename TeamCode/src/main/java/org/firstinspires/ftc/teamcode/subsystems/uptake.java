@@ -11,6 +11,7 @@ public class uptake implements Subsystem {
 
     private MotorEx motor = new MotorEx("uptake").brakeMode();
 
+
     public Command turnOn(double power) {
         return new LambdaCommand("Uptake On")
                 .setStart(() -> motor.setPower(power))

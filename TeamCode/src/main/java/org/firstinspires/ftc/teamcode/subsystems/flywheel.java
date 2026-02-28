@@ -16,6 +16,7 @@ public class flywheel implements Subsystem {
     private double currentGoalVelocity = 0;
     private static final double SPEED_TOLERANCE = 200;
 
+
     @Override
     public void initialize() {
         motor = ActiveOpMode.hardwareMap().get(DcMotorEx.class, "flywheel");
