@@ -52,11 +52,11 @@ public class RegressionFinder extends LinearOpMode{
             }
 
             if (gamepad1.y) {
-                intake.setPower(.8);
-                uptake.setPower(.8);
+                intake.setVelocity(950);
+                uptake.setVelocity(525);
             } else if (gamepad1.a) {
-                intake.setPower(0);
-                uptake.setPower(0);
+                intake.setVelocity(0);
+                uptake.setVelocity(0);
             }
 
 
