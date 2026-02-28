@@ -104,7 +104,7 @@ public class flywheel implements Subsystem {
     }
 
     public Command stop() {
-        return runAtVelocity(0);
+        return runAtVelocityAuto(0);
     }
 
     // Set velocity to 0 and finish immediately (for use in sequences)
