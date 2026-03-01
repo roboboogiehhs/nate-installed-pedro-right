@@ -10,8 +10,8 @@ public class Shooting {
 
 
     //todo update these for new bot
-    private static final double REGRESSION_SLOPE = 6.06833;
-    private static final double REGRESSION_INTERCEPT = 983.06761;
+    private static final double REGRESSION_SLOPE = 238.63509;
+    private static final double REGRESSION_INTERCEPT = 983.46602;
     private static final double MIN_VELOCITY = 500.0;
     private static final double MAX_VELOCITY = 6000.0;
 
@@ -43,20 +43,20 @@ public class Shooting {
     public static Command autoShoot() {
         final double[] originalVelocity = {0};
         return new SequentialGroup(
-                new ParallelGroup(
-                        fullIntake.off(),
-                        servo.INSTANCE.open()
-                ),
+                intake.INSTANCE.turnOff(),
+                uptake.INSTANCE.turnOff(),
+                servo.INSTANCE.open(),
                 new Delay(0.5),
-                fullIntake.on(),
+                intake.INSTANCE.turnOn(950),
+                uptake.INSTANCE.turnOn(525),
                 new Delay(1),
                 new LambdaCommand("IncreaseFlywheelVelocity")
                         .setStart(() -> {
                             originalVelocity[0] = flywheel.INSTANCE.getGoalVelocity();
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 20);
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 30);
                         })
                         .setIsDone(() -> true),
-                new Delay(0.5),
+                new Delay(0.85),
                 servo.INSTANCE.close(),
                 new LambdaCommand("RestoreFlywheelVelocity")
                         .setStart(() -> flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]))

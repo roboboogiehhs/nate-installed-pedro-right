@@ -35,8 +35,8 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
     Pose startPose = new Pose(33, 133, Math.toRadians(90));
     Pose launchPose = new Pose(54, 90, Math.toRadians(125));
     Pose pickupRow2 = new Pose(12, 50, Math.toRadians(180));
-    Pose pickupClassifier = new Pose(13, 58, Math.toRadians(155));
-    Pose pickupRow1 = new Pose(12, 76, Math.toRadians(180));
+    Pose pickupClassifier = new Pose(13, 60, Math.toRadians(155));
+    Pose pickupRow1 = new Pose(12, 79, Math.toRadians(180));
     Pose pickupRow3 = new Pose(12, 27, Math.toRadians(180));
     Pose offLineLaunch = new Pose(56, 92, Math.toRadians(140));
     Pose offLineTurn = new Pose(56, 102, Math.toRadians(180));
@@ -143,6 +143,8 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
     public void onInit() {
         PedroComponent.follower().setStartingPose(startPose);
         servo.INSTANCE.close().schedule();
+        intake.INSTANCE.turnOff().schedule();
+        uptake.INSTANCE.turnOff().schedule();
 
         buildPaths();
     }

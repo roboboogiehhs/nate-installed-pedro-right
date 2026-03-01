@@ -10,8 +10,8 @@ public class fullIntake {
 
     public static Command on() {
         return new ParallelGroup(
-                intake.INSTANCE.turnOn(),
-                uptake.INSTANCE.turnOn()
+                intake.INSTANCE.turnOn(950),
+                uptake.INSTANCE.turnOn(-525)
         );
     }
 

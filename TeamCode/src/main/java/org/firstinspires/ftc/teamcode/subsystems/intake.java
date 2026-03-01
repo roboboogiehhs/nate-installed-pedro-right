@@ -20,7 +20,6 @@ public class intake implements Subsystem {
     public void initialize() {
         motor = ActiveOpMode.hardwareMap().get(DcMotorEx.class, "intake");
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 

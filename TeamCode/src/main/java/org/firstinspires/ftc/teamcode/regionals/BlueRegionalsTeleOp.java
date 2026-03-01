@@ -46,8 +46,15 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
     @Override
     public void onInit() {
         servo.INSTANCE.close().schedule();
-
         servo.INSTANCE.close().schedule();
+
+        intake.INSTANCE.turnOff().schedule();
+        intake.INSTANCE.turnOff().schedule();
+
+
+        uptake.INSTANCE.turnOff().schedule();
+        uptake.INSTANCE.turnOff().schedule();
+
 
         if (PoseStorage.currentPose != null) {
             PedroComponent.follower().setPose(PoseStorage.currentPose);
@@ -123,11 +130,18 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
         Gamepads.gamepad1().leftBumper().whenBecomesTrue(
                 new LambdaCommand("Toggle Feed")
                         .setStart(() -> {
-                            if (intake.INSTANCE.isOn()) {
-                                fullIntake.off().schedule();
-                            } else {
-                                fullIntake.on().schedule();
-                            }
+                                intake.INSTANCE.turnOn(950).schedule();
+                                uptake.INSTANCE.turnOn(-525).schedule();
+                        })
+                        .setIsDone(() -> true)
+        );
+
+        // LEFT BUMPER: Toggle intake/uptake
+        Gamepads.gamepad1().leftTrigger().greaterThan(0.5).whenBecomesTrue(
+                new LambdaCommand("Toggle Feed")
+                        .setStart(() -> {
+                            intake.INSTANCE.turnOff().schedule();
+                            uptake.INSTANCE.turnOff().schedule();
                         })
                         .setIsDone(() -> true)
         );
