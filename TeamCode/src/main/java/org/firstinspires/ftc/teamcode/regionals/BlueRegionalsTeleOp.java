@@ -215,6 +215,12 @@ public class BlueRegionalsTeleOp extends NextFTCOpMode {
             flywheel.INSTANCE.setTargetVelocity(velocity);
         }
 
+        if(flywheelActive){
+            gamepad1.rumble(1,1,250);
+        } else {
+            gamepad1.stopRumble();
+        }
+
         telemetry.addLine("=== SHOOTING ===");
         telemetry.addData("Flywheel", flywheelActive ? "ACTIVE" : "OFF");
         telemetry.addData("Distance to Goal", "%.2f m", distance);

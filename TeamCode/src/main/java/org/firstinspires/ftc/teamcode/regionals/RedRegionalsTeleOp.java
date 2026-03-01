@@ -211,7 +211,13 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
 
         if (flywheelActive && !Shooting.isShooting) {
             double velocity = Shooting.calculateVelocity(distance);
-            flywheel.INSTANCE.setTargetVelocity(velocity);
+            flywheel.INSTANCE.setTargetVelocity(velocity+30);
+        }
+
+        if(flywheelActive){
+            gamepad1.rumble(1,1,250);
+        } else {
+            gamepad1.stopRumble();
         }
 
         telemetry.addLine("=== SHOOTING ===");
