@@ -24,7 +24,7 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Configurable
-@Autonomous(name = "BLUE autonomous")
+@Autonomous(name = "BLUE autonomous", preselectTeleOp = "RED teleop" )
 public class blueRegionalsAutoClose extends NextFTCOpMode {
     public blueRegionalsAutoClose() {
         addComponents(

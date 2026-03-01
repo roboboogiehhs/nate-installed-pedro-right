@@ -30,6 +30,8 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
     private boolean flywheelActive = false;
     private double targetHeading = 0;
 
+    private long turnStartTime;
+
     private static final Pose RED_AUTO_END = new Pose(114, 90, Math.toRadians(0));
     private static final Pose RED_GOAL = new Pose(110, 134, Math.toRadians(270));
     private static final Pose CENTER = new Pose(72, 72, Math.toRadians(0));
@@ -46,6 +48,19 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
     @Override
     public void onInit() {
         servo.INSTANCE.close().schedule();
+        servo.INSTANCE.close().schedule();
+
+        intake.INSTANCE.turnOff().schedule();
+        intake.INSTANCE.turnOff().schedule();
+
+
+        uptake.INSTANCE.turnOff().schedule();
+        uptake.INSTANCE.turnOff().schedule();
+
+        flywheel.INSTANCE.stop().schedule();
+        flywheel.INSTANCE.stop().schedule();;
+
+
 
         if (PoseStorage.currentPose != null) {
             PedroComponent.follower().setPose(PoseStorage.currentPose);
@@ -116,15 +131,22 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
                         .setIsDone(() -> true)
         );
 
-        // LEFT BUMPER: Toggle intake/uptake
+        // LEFT BUMPER: intake/uptake on
         Gamepads.gamepad1().leftBumper().whenBecomesTrue(
                 new LambdaCommand("Toggle Feed")
                         .setStart(() -> {
-                            if (intake.INSTANCE.isOn()) {
-                                fullIntake.off().schedule();
-                            } else {
-                                fullIntake.on().schedule();
-                            }
+                                intake.INSTANCE.turnOn(950).schedule();
+                                uptake.INSTANCE.turnOn(525).schedule();
+                        })
+                        .setIsDone(() -> true)
+        );
+
+        // LEFT TRIGGER: Intake/uptake off
+        Gamepads.gamepad1().leftTrigger().greaterThan(0.5).whenBecomesTrue(
+                new LambdaCommand("Toggle Feed")
+                        .setStart(() -> {
+                            intake.INSTANCE.turnOff().schedule();
+                            uptake.INSTANCE.turnOff().schedule();
                         })
                         .setIsDone(() -> true)
         );
@@ -135,13 +157,15 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
                             Pose pose = PedroComponent.follower().getPose();
                             targetHeading = calculateHeadingToGoal(pose);
                             PedroComponent.follower().turnTo(targetHeading);
+                            turnStartTime = System.currentTimeMillis();
                         })
                         .setIsDone(() -> {
                             double current = PedroComponent.follower().getPose().getHeading();
                             double diff = targetHeading - current;
                             while (diff > Math.PI) diff -= 2 * Math.PI;
                             while (diff < -Math.PI) diff += 2 * Math.PI;
-                            return Math.abs(diff) < Math.toRadians(5);
+                            return Math.abs(diff) < Math.toRadians(5)
+                                    || (System.currentTimeMillis() - turnStartTime > 2000);
                         })
                         .setStop((interrupted) -> {
                             PedroComponent.follower().breakFollowing();
@@ -176,7 +200,7 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
         while (heading > Math.PI) heading -= 2 * Math.PI;
         while (heading < -Math.PI) heading += 2 * Math.PI;
 
-        return heading;
+        return heading + Math.toRadians(4);
     }
 
     @Override
@@ -185,7 +209,7 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
         double distance = getDistanceToGoal();
         double calculatedVelocity = Shooting.calculateVelocity(distance);
 
-        if (flywheelActive) {
+        if (flywheelActive && !Shooting.isShooting) {
             double velocity = Shooting.calculateVelocity(distance);
             flywheel.INSTANCE.setTargetVelocity(velocity);
         }
@@ -195,7 +219,9 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
         telemetry.addData("Distance to Goal", "%.2f m", distance);
         telemetry.addData("Calculated Velocity", "%.0f", calculatedVelocity);
         telemetry.addData("Current Velocity", "%.0f", flywheel.INSTANCE.getCurrentVelocity());
-        telemetry.addData("At Speed", flywheel.INSTANCE.isAtSpeed() ? "YES" : "NO");
+        telemetry.addData("At Speed?", flywheel.INSTANCE.isAtSpeed() ? "YES" : "NO");
+        telemetry.addData("Goal Velocity", "%.0f", flywheel.INSTANCE.getGoalVelocity());
+        telemetry.addData("Is Shooting?", Shooting.isShooting ? "YES" : "NO");
         telemetry.addLine();
         telemetry.addLine("=== POSITION ===");
         telemetry.addData("X", "%.2f", pose.getX());

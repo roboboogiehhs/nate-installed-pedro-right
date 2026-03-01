@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.FlywheelTuning;
 import com.bylazar.panels.Panels;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,7 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
 
-
+@Disabled
 public abstract class FlywheelTuning extends LinearOpMode {
 /*
     // Set kV = 1.0 / maxVelocity from FlywheelTest
