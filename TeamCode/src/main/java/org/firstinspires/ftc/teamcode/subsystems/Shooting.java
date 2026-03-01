@@ -10,14 +10,16 @@ public class Shooting {
 
 
     //todo update these for new bot
-    private static final double REGRESSION_SLOPE = 238.63509;
-    private static final double REGRESSION_INTERCEPT = 983.46602;
+    private static final double REGRESSION_SLOPE = 210.17011;
+    private static final double REGRESSION_INTERCEPT = 1092.80593;
     private static final double MIN_VELOCITY = 500.0;
     private static final double MAX_VELOCITY = 6000.0;
 
+    public static boolean isShooting = false;
+
     public static double calculateVelocity(double distanceMeters) {
         double vel = REGRESSION_SLOPE * distanceMeters + REGRESSION_INTERCEPT;
-        return Math.max(MIN_VELOCITY, Math.min(MAX_VELOCITY, vel));
+        return Math.max(MIN_VELOCITY, Math.min(MAX_VELOCITY, vel) +130);
     }
 
     public static Command shoot(double velocity) {
@@ -46,17 +48,28 @@ public class Shooting {
                 intake.INSTANCE.turnOff(),
                 uptake.INSTANCE.turnOff(),
                 servo.INSTANCE.open(),
-                new Delay(0.5),
-                intake.INSTANCE.turnOn(950),
-                uptake.INSTANCE.turnOn(525),
-                new Delay(1),
+                new Delay(0.45),
                 new LambdaCommand("IncreaseFlywheelVelocity")
                         .setStart(() -> {
                             originalVelocity[0] = flywheel.INSTANCE.getGoalVelocity();
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 30);
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] - 5);
                         })
                         .setIsDone(() -> true),
-                new Delay(0.85),
+                intake.INSTANCE.turnOn(950),
+                uptake.INSTANCE.turnOn(500),
+                new Delay(0.55),
+                new LambdaCommand("IncreaseFlywheelVelocity")
+                        .setStart(() -> {
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 50);
+                        })
+                        .setIsDone(() -> true),
+                new Delay(0.3),
+                new LambdaCommand("IncreaseFlywheelVelocity2")
+                        .setStart(() -> {
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 130);
+                        })
+                        .setIsDone(() -> true),
+                new Delay(0.2),
                 servo.INSTANCE.close(),
                 new LambdaCommand("RestoreFlywheelVelocity")
                         .setStart(() -> flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]))
@@ -66,15 +79,44 @@ public class Shooting {
 
 
     public static Command feedAndShoot() {
+        isShooting = true;
+        final double[] originalVelocity = {0};
         return new SequentialGroup(
-                fullIntake.off(),
+                intake.INSTANCE.turnOff(),
+                uptake.INSTANCE.turnOff(),
                 servo.INSTANCE.open(),
-                new Delay(.5),
-                fullIntake.on(),
-                new Delay(1.5),
-                servo.INSTANCE.close()
+                new Delay(0.5),
+                new LambdaCommand("IncreaseFlywheelVelocity")
+                        .setStart(() -> {
+                            originalVelocity[0] = flywheel.INSTANCE.getGoalVelocity();
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]);
+                        })
+                        .setIsDone(() -> true),
+                intake.INSTANCE.turnOn(950),
+                uptake.INSTANCE.turnOn(500),
+                new Delay(0.55),
+                new LambdaCommand("IncreaseFlywheelVelocity")
+                        .setStart(() -> {
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 60);
+                        })
+                        .setIsDone(() -> true),
+                new Delay(0.4),
+                new LambdaCommand("IncreaseFlywheelVelocity2")
+                        .setStart(() -> {
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 130);
+                        })
+                        .setIsDone(() -> true),
+                new Delay(0.4),
+                servo.INSTANCE.close(),
+                new LambdaCommand("RestoreFlywheelVelocity")
+                        .setStart(() -> {
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]);
+                            isShooting = false;
+                        })
+                        .setIsDone(() -> true)
         );
     }
+
 
     public static Command emergencyStop() {
         return new ParallelGroup(

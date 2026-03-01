@@ -23,12 +23,13 @@ public class RegressionFinder extends LinearOpMode{
         //init stuff
         intake = hardwareMap.get(DcMotorEx.class, "intake");
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        //intake.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         uptake = hardwareMap.get(DcMotorEx.class, "uptake");
         uptake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         uptake.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        uptake.setDirection(DcMotorSimple.Direction.REVERSE);
 
         flywheel = hardwareMap.get(DcMotorEx.class,"flywheel");
         //flywheel.setDirection(DcMotorSimple.Direction.REVERSE);

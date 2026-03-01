@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.regionals;
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -22,6 +23,7 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
+@Configurable
 @Autonomous(name = "BLUE autonomous")
 public class blueRegionalsAutoClose extends NextFTCOpMode {
     public blueRegionalsAutoClose() {
@@ -32,14 +34,21 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         );
     }
 
+    public static int PRELOADVEL = 1440;
+    public static int SECONDVEL = 1480;
+    public static int CLASSVEL = 1545;
+    public static int FIRSTVEL = 1553;
+    public static int THIRDVEL = 1525;
+
+
     Pose startPose = new Pose(33, 133, Math.toRadians(90));
     Pose launchPose = new Pose(54, 90, Math.toRadians(125));
-    Pose pickupRow2 = new Pose(12, 50, Math.toRadians(180));
-    Pose pickupClassifier = new Pose(13, 60, Math.toRadians(155));
-    Pose pickupRow1 = new Pose(12, 79, Math.toRadians(180));
-    Pose pickupRow3 = new Pose(12, 27, Math.toRadians(180));
-    Pose offLineLaunch = new Pose(56, 92, Math.toRadians(140));
-    Pose offLineTurn = new Pose(56, 102, Math.toRadians(180));
+    Pose pickupRow2 = new Pose(12, 52, Math.toRadians(180));
+    Pose pickupClassifier = new Pose(11, 63, Math.toRadians(155));
+    Pose pickupRow1 = new Pose(18, 79, Math.toRadians(180));
+    Pose pickupRow3 = new Pose(12, 29, Math.toRadians(180));
+    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(140));
+    Pose offLineTurn = new Pose(58, 106, Math.toRadians(180));
 
     PathChain scorePreload;
     PathChain grabRow2;
@@ -55,13 +64,13 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
     public void buildPaths() {
         scorePreload = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(startPose, launchPose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), launchPose.getHeading())
+                .setLinearHeadingInterpolation(startPose.getHeading(), Math.toRadians(127))
                 .build();
         grabRow2 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(launchPose,
                         new Pose(55.480301274623386, 56.53476245654693),
                         new Pose(54.81981460023173, 58.28447276940902), pickupRow2))
-                .setLinearHeadingInterpolation(launchPose.getHeading(), pickupRow2.getHeading())
+                .setLinearHeadingInterpolation(Math.toRadians(127), pickupRow2.getHeading())
                 .build();
         scoreRow2 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(pickupRow2,
@@ -70,7 +79,7 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
                 .build();
         grabClassifier = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(launchPose,
-                        new Pose(34.766512166859805, 67.17439165701046), pickupClassifier))
+                        new Pose(34.766512166859805, 65), pickupClassifier))
                 .setLinearHeadingInterpolation(launchPose.getHeading(), pickupClassifier.getHeading())
                 .build();
         scoreClassifier = PedroComponent.follower().pathBuilder()
@@ -107,35 +116,37 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
 
     public Command run() {
         return new SequentialGroup(
+                intake.INSTANCE.turnOn(950),
                 flywheel.INSTANCE.stop(),
                 new ParallelGroup(
-                        flywheel.INSTANCE.runAtVelocityAuto(1250),
+                        flywheel.INSTANCE.runAtVelocityAuto(PRELOADVEL),
                         new FollowPath(scorePreload)
                 ),
 
                 Shooting.autoShoot(),
 
+                flywheel.INSTANCE.runAtVelocityAuto(SECONDVEL),
                 new FollowPath(grabRow2),
                 new FollowPath(scoreRow2),
                 Shooting.autoShoot(),
 
+                flywheel.INSTANCE.runAtVelocityAuto(CLASSVEL),
                 new FollowPath(grabClassifier),
                 new Delay(2),
                 new FollowPath(scoreClassifier),
                 Shooting.autoShoot(),
 
+                flywheel.INSTANCE.runAtVelocityAuto(FIRSTVEL),
                 new FollowPath(grabRow1),
                 new FollowPath(scoreRow1),
                 Shooting.autoShoot(),
 
+                flywheel.INSTANCE.runAtVelocityAuto(THIRDVEL),
                 new FollowPath(grabRow3),
                 new FollowPath(scoreRow3),
                 Shooting.autoShoot(),
 
-                new FollowPath(offLine),
-                new LambdaCommand("Save Pose")
-                        .setStart(() -> PoseStorage.currentPose = PedroComponent.follower().getPose())
-                        .setIsDone(() -> true)
+                new FollowPath(offLine)
         );
     }
 
@@ -145,6 +156,7 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         servo.INSTANCE.close().schedule();
         intake.INSTANCE.turnOff().schedule();
         uptake.INSTANCE.turnOff().schedule();
+        flywheel.INSTANCE.stop().schedule();
 
         buildPaths();
     }
@@ -160,6 +172,8 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
 
     @Override
     public void onStop() {
-
+        PoseStorage.currentPose = PedroComponent.follower().getPose();
     }
+
+
 }
