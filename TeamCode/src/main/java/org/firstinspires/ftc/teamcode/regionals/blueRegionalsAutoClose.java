@@ -34,8 +34,8 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         );
     }
 
-    public static int PRELOADVEL = 1440;
-    public static int SECONDVEL = 1480;
+    public static int PRELOADVEL = 1430;
+    public static int SECONDVEL = 1470;
     public static int CLASSVEL = 1545;
     public static int FIRSTVEL = 1553;
     public static int THIRDVEL = 1525;
@@ -44,8 +44,8 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
     Pose startPose = new Pose(33, 133, Math.toRadians(90));
     Pose launchPose = new Pose(54, 90, Math.toRadians(125));
     Pose pickupRow2 = new Pose(12, 52, Math.toRadians(180));
-    Pose pickupClassifier = new Pose(11, 63, Math.toRadians(155));
-    Pose pickupRow1 = new Pose(18, 79, Math.toRadians(180));
+    Pose pickupClassifier = new Pose(11, 67, Math.toRadians(155));
+    Pose pickupRow1 = new Pose(18, 83, Math.toRadians(180));
     Pose pickupRow3 = new Pose(12, 29, Math.toRadians(180));
     Pose offLineLaunch = new Pose(56, 104, Math.toRadians(140));
     Pose offLineTurn = new Pose(58, 106, Math.toRadians(180));

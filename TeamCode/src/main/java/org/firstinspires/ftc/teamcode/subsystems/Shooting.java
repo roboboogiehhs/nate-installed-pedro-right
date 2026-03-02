@@ -19,7 +19,7 @@ public class Shooting {
 
     public static double calculateVelocity(double distanceMeters) {
         double vel = REGRESSION_SLOPE * distanceMeters + REGRESSION_INTERCEPT;
-        return Math.max(MIN_VELOCITY, Math.min(MAX_VELOCITY, vel) +145);
+        return Math.max(MIN_VELOCITY, Math.min(MAX_VELOCITY, vel) +130);
     }
 
     public static Command shoot(double velocity) {
@@ -132,7 +132,7 @@ public class Shooting {
                 new Delay(0.55),
                 new LambdaCommand("IncreaseFlywheelVelocity")
                         .setStart(() -> {
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 60);
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 75);
                         })
                         .setIsDone(() -> true),
                 new Delay(0.4),
