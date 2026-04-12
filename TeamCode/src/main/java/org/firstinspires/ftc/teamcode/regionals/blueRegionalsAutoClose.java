@@ -40,7 +40,7 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         );
     }
 
-    public static int PRELOADVEL = 1413;
+    public static int PRELOADVEL = 1417;
     public static int SECONDVEL = 1453;
     public static int CLASSVEL = 1517;
     public static int FIRSTVEL = 1540;
