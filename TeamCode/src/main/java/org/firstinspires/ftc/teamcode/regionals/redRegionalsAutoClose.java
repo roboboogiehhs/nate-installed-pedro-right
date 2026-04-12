@@ -11,6 +11,7 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.PoseHistory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import java.util.ArrayList;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Shooting;
@@ -51,6 +52,7 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
     private final Style pathStyle = new Style("", "#F44336", 0.75);   // red for planned paths
     private final Style robotStyle = new Style("", "#4CAF50", 0.75);  // green for actual robot
     private final Style historyStyle = new Style("", "#FFEB3B", 0.75); // yellow for pose history
+    private final ArrayList<double[]> poseHistoryList = new ArrayList<>();
 
 
     Pose startPose = new Pose(33, 133, Math.toRadians(90)).mirror();
@@ -186,6 +188,13 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
+        Pose currentPose = PedroComponent.follower().getPose();
+
+        // Record pose every loop for full-auto history
+        if (currentPose != null && !Double.isNaN(currentPose.getX()) && !Double.isNaN(currentPose.getY())) {
+            poseHistoryList.add(new double[]{currentPose.getX(), currentPose.getY()});
+        }
+
         // Draw all planned paths
         drawPathChain(scorePreload);
         drawPathChain(grabRow2);
@@ -198,11 +207,11 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
         drawPathChain(scoreRow3);
         drawPathChain(offLine);
 
-        // Draw pose history (where the robot actually traveled)
+        // Draw full pose history (persists across all path segments)
         drawPoseHistory();
 
         // Draw actual robot position
-        drawRobot(PedroComponent.follower().getPose(), robotStyle);
+        drawRobot(currentPose, robotStyle);
 
         panelsField.update();
     }
@@ -218,8 +227,7 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
             double[][] points = path.getPanelsDrawingPoints();
             for (int j = 0; j < points[0].length; j++) {
                 for (int k = 0; k < points.length; k++) {
-                    if (Double.isNaN(points[k][j])) points[k][j] = 0;
-                }
+                    if (Double.isNaN(points[k][j])) points[k][j] = 0;}
             }
             panelsField.setStyle(pathStyle);
             panelsField.moveCursor(points[0][0], points[0][1]);
@@ -245,12 +253,12 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
     }
 
     private void drawPoseHistory() {
-        PoseHistory tracker = PedroComponent.follower().getPoseHistory();
         panelsField.setStyle(historyStyle);
-        int size = tracker.getXPositionsArray().length;
-        for (int i = 0; i < size - 1; i++) {
-            panelsField.moveCursor(tracker.getXPositionsArray()[i], tracker.getYPositionsArray()[i]);
-            panelsField.line(tracker.getXPositionsArray()[i + 1], tracker.getYPositionsArray()[i + 1]);
+        for (int i = 0; i < poseHistoryList.size() - 1; i++) {
+            double[] current = poseHistoryList.get(i);
+            double[] next = poseHistoryList.get(i + 1);
+            panelsField.moveCursor(current[0], current[1]);
+            panelsField.line(next[0], next[1]);
         }
     }
 }
