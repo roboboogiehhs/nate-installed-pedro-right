@@ -53,6 +53,7 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
     private final Style robotStyle = new Style("", "#4CAF50", 0.75);  // green for actual robot
     private final Style historyStyle = new Style("", "#FFEB3B", 0.75); // yellow for pose history
     private final ArrayList<double[]> poseHistoryList = new ArrayList<>();
+    private int loopCount = 0;
 
 
     Pose startPose = new Pose(33, 133, Math.toRadians(90)).mirror();
@@ -190,8 +191,9 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
     public void onUpdate() {
         Pose currentPose = PedroComponent.follower().getPose();
 
-        // Record pose every loop for full-auto history
-        if (currentPose != null && !Double.isNaN(currentPose.getX()) && !Double.isNaN(currentPose.getY())) {
+        // Record pose every 5 loops to keep draw count manageable for Panels
+        loopCount++;
+        if (loopCount % 5 == 0 && currentPose != null && !Double.isNaN(currentPose.getX()) && !Double.isNaN(currentPose.getY())) {
             poseHistoryList.add(new double[]{currentPose.getX(), currentPose.getY()});
         }
 

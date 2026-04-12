@@ -1,10 +1,16 @@
 package org.firstinspires.ftc.teamcode.regionals;
 import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.field.FieldManager;
+import com.bylazar.field.PanelsField;
+import com.bylazar.field.Style;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.Vector;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import java.util.ArrayList;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Shooting;
@@ -40,14 +46,21 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
     public static int FIRSTVEL = 1553;
     public static int THIRDVEL = 1525;
 
+    private static final double ROBOT_RADIUS = 9;
+    private final FieldManager panelsField = PanelsField.INSTANCE.getField();
+    private final Style pathStyle = new Style("", "#2196F3", 0.75);   // blue for planned paths
+    private final Style robotStyle = new Style("", "#4CAF50", 0.75);  // green for actual robot
+    private final Style historyStyle = new Style("", "#FFEB3B", 0.75); // yellow for pose history
+    private final ArrayList<double[]> poseHistoryList = new ArrayList<>();
+    private int loopCount = 0;
 
     Pose startPose = new Pose(33, 133, Math.toRadians(90));
-    Pose launchPose = new Pose(54, 90, Math.toRadians(125));
-    Pose pickupRow2 = new Pose(12, 52, Math.toRadians(180));
-    Pose pickupClassifier = new Pose(11, 67, Math.toRadians(155));
-    Pose pickupRow1 = new Pose(18, 83, Math.toRadians(180));
-    Pose pickupRow3 = new Pose(12, 29, Math.toRadians(180));
-    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(140));
+    Pose launchPose = new Pose(54, 90, Math.toRadians(120));
+    Pose pickupRow2 = new Pose(12, 55, Math.toRadians(180));
+    Pose pickupClassifier = new Pose(13, 63, Math.toRadians(155));
+    Pose pickupRow1 = new Pose(18, 79, Math.toRadians(180));
+    Pose pickupRow3 = new Pose(12, 33, Math.toRadians(180));
+    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(135));
     Pose offLineTurn = new Pose(58, 106, Math.toRadians(180));
 
     PathChain scorePreload;
@@ -159,6 +172,8 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         flywheel.INSTANCE.stop().schedule();
 
         buildPaths();
+
+        panelsField.setOffsets(PanelsField.INSTANCE.getPresets().getPEDRO_PATHING());
     }
 
     @Override
@@ -171,9 +186,80 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
     }
 
     @Override
+    public void onUpdate() {
+        Pose currentPose = PedroComponent.follower().getPose();
+
+        // Record pose every 5 loops to keep draw count manageable for Panels
+        loopCount++;
+        if (loopCount % 5 == 0 && currentPose != null && !Double.isNaN(currentPose.getX()) && !Double.isNaN(currentPose.getY())) {
+            poseHistoryList.add(new double[]{currentPose.getX(), currentPose.getY()});
+        }
+
+        // Draw all planned paths
+        drawPathChain(scorePreload);
+        drawPathChain(grabRow2);
+        drawPathChain(scoreRow2);
+        drawPathChain(grabClassifier);
+        drawPathChain(scoreClassifier);
+        drawPathChain(grabRow1);
+        drawPathChain(scoreRow1);
+        drawPathChain(grabRow3);
+        drawPathChain(scoreRow3);
+        drawPathChain(offLine);
+
+        // Draw full pose history (persists across all path segments)
+        drawPoseHistory();
+
+        // Draw actual robot position
+        drawRobot(currentPose, robotStyle);
+
+        panelsField.update();
+    }
+
+    @Override
     public void onStop() {
         PoseStorage.currentPose = PedroComponent.follower().getPose();
     }
 
+    private void drawPathChain(PathChain pathChain) {
+        for (int i = 0; i < pathChain.size(); i++) {
+            Path path = pathChain.getPath(i);
+            double[][] points = path.getPanelsDrawingPoints();
+            for (int j = 0; j < points[0].length; j++) {
+                for (int k = 0; k < points.length; k++) {
+                    if (Double.isNaN(points[k][j])) points[k][j] = 0;
+                }
+            }
+            panelsField.setStyle(pathStyle);
+            panelsField.moveCursor(points[0][0], points[0][1]);
+            panelsField.line(points[1][0], points[1][1]);
+        }
+    }
 
+    private void drawRobot(Pose pose, Style style) {
+        if (pose == null || Double.isNaN(pose.getX()) || Double.isNaN(pose.getY())) return;
+
+        panelsField.setStyle(style);
+        panelsField.moveCursor(pose.getX(), pose.getY());
+        panelsField.circle(ROBOT_RADIUS);
+
+        Vector v = pose.getHeadingAsUnitVector();
+        v.setMagnitude(v.getMagnitude() * ROBOT_RADIUS);
+        double x2 = pose.getX() + v.getXComponent();
+        double y2 = pose.getY() + v.getYComponent();
+
+        panelsField.setStyle(style);
+        panelsField.moveCursor(pose.getX() + v.getXComponent() / 2, pose.getY() + v.getYComponent() / 2);
+        panelsField.line(x2, y2);
+    }
+
+    private void drawPoseHistory() {
+        panelsField.setStyle(historyStyle);
+        for (int i = 0; i < poseHistoryList.size() - 1; i++) {
+            double[] current = poseHistoryList.get(i);
+            double[] next = poseHistoryList.get(i + 1);
+            panelsField.moveCursor(current[0], current[1]);
+            panelsField.line(next[0], next[1]);
+        }
+    }
 }
