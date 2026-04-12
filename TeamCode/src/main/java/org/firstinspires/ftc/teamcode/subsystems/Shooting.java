@@ -52,7 +52,7 @@ public class Shooting {
                 new LambdaCommand("IncreaseFlywheelVelocity")
                         .setStart(() -> {
                             originalVelocity[0] = flywheel.INSTANCE.getGoalVelocity();
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]-10);
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]-20);
                         })
                         .setIsDone(() -> true),
                 intake.INSTANCE.turnOn(950),
@@ -87,7 +87,7 @@ public class Shooting {
                 new LambdaCommand("IncreaseFlywheelVelocity")
                         .setStart(() -> {
                             originalVelocity[0] = flywheel.INSTANCE.getGoalVelocity();
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]-10);
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]-20);
                         })
                         .setIsDone(() -> true),
                 intake.INSTANCE.turnOn(950),
@@ -124,7 +124,7 @@ public class Shooting {
                 new LambdaCommand("IncreaseFlywheelVelocity")
                         .setStart(() -> {
                             originalVelocity[0] = flywheel.INSTANCE.getGoalVelocity();
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]-10);
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]-20);
                         })
                         .setIsDone(() -> true),
                 intake.INSTANCE.turnOn(950),

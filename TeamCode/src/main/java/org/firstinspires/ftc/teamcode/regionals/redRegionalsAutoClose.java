@@ -54,12 +54,12 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
 
 
     Pose startPose = new Pose(33, 133, Math.toRadians(90)).mirror();
-    Pose launchPose = new Pose(54, 90, Math.toRadians(125)).mirror();
-    Pose pickupRow2 = new Pose(12, 54, Math.toRadians(180)).mirror();
+    Pose launchPose = new Pose(54, 90, Math.toRadians(120)).mirror();
+    Pose pickupRow2 = new Pose(12, 55, Math.toRadians(180)).mirror();
     Pose pickupClassifier = new Pose(13, 63, Math.toRadians(155)).mirror();
     Pose pickupRow1 = new Pose(18, 79, Math.toRadians(180)).mirror();
     Pose pickupRow3 = new Pose(12, 33, Math.toRadians(180)).mirror();
-    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(140)).mirror();
+    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(135)).mirror();
     Pose offLineTurn = new Pose(58, 106, Math.toRadians(180)).mirror();
 
     PathChain scorePreload;
