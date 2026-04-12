@@ -60,13 +60,13 @@ public class Shooting {
                 new Delay(0.55),
                 new LambdaCommand("IncreaseFlywheelVelocity")
                         .setStart(() -> {
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 70);
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 60);
                         })
                         .setIsDone(() -> true),
                 new Delay(0.3),
                 new LambdaCommand("IncreaseFlywheelVelocity2")
                         .setStart(() -> {
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 160);
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 150);
                         })
                         .setIsDone(() -> true),
                 new Delay(0.2),
@@ -95,13 +95,13 @@ public class Shooting {
                 new Delay(0.55),
                 new LambdaCommand("IncreaseFlywheelVelocity")
                         .setStart(() -> {
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 90);
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 80);
                         })
                         .setIsDone(() -> true),
                 new Delay(0.3),
                 new LambdaCommand("IncreaseFlywheelVelocity2")
                         .setStart(() -> {
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 165);
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 155);
                         })
                         .setIsDone(() -> true),
                 new Delay(0.2),
@@ -132,13 +132,13 @@ public class Shooting {
                 new Delay(0.55),
                 new LambdaCommand("IncreaseFlywheelVelocity")
                         .setStart(() -> {
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 75);
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 65);
                         })
                         .setIsDone(() -> true),
                 new Delay(0.4),
                 new LambdaCommand("IncreaseFlywheelVelocity2")
                         .setStart(() -> {
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 140);
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0] + 130);
                         })
                         .setIsDone(() -> true),
                 new Delay(0.4),
