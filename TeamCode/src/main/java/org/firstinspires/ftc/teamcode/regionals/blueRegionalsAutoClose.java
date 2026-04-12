@@ -40,11 +40,11 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         );
     }
 
-    public static int PRELOADVEL = 1430;
-    public static int SECONDVEL = 1470;
-    public static int CLASSVEL = 1545;
-    public static int FIRSTVEL = 1553;
-    public static int THIRDVEL = 1525;
+    public static int PRELOADVEL = 1413;
+    public static int SECONDVEL = 1453;
+    public static int CLASSVEL = 1517;
+    public static int FIRSTVEL = 1540;
+    public static int THIRDVEL = 1477;
 
     private static final double ROBOT_RADIUS = 9;
     private final FieldManager panelsField = PanelsField.INSTANCE.getField();
@@ -55,12 +55,12 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
     private int loopCount = 0;
 
     Pose startPose = new Pose(33, 133, Math.toRadians(90));
-    Pose launchPose = new Pose(54, 90, Math.toRadians(120));
+    Pose launchPose = new Pose(54, 90, Math.toRadians(138));
     Pose pickupRow2 = new Pose(12, 55, Math.toRadians(180));
-    Pose pickupClassifier = new Pose(13, 63, Math.toRadians(155));
+    Pose pickupClassifier = new Pose(14, 62, Math.toRadians(160));
     Pose pickupRow1 = new Pose(18, 79, Math.toRadians(180));
     Pose pickupRow3 = new Pose(12, 33, Math.toRadians(180));
-    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(135));
+    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(153));
     Pose offLineTurn = new Pose(58, 106, Math.toRadians(180));
 
     PathChain scorePreload;
@@ -77,7 +77,7 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
     public void buildPaths() {
         scorePreload = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(startPose, launchPose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), Math.toRadians(127))
+                .setLinearHeadingInterpolation(startPose.getHeading(), Math.toRadians(/*67*/ 138))
                 .build();
         grabRow2 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(launchPose,
@@ -98,7 +98,7 @@ public class blueRegionalsAutoClose extends NextFTCOpMode {
         scoreClassifier = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(pickupClassifier,
                         new Pose(38.505793742757824, 70.32966396292005), launchPose))
-                .setLinearHeadingInterpolation(pickupClassifier.getHeading(), launchPose.getHeading())
+                .setLinearHeadingInterpolation(pickupClassifier.getHeading(), launchPose.getHeading()+2)
                 .build();
         grabRow1 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(launchPose,

@@ -45,16 +45,17 @@ public class Shooting {
     public static Command autoShoot() {
         final double[] originalVelocity = {0};
         return new SequentialGroup(
+                new LambdaCommand("IncreaseFlywheelVelocity")
+                        .setStart(() -> {
+                            originalVelocity[0] = flywheel.INSTANCE.getGoalVelocity();
+                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]-160);
+                        })
+                        .setIsDone(() -> true),
+
                 intake.INSTANCE.turnOff(),
                 uptake.INSTANCE.turnOff(),
                 servo.INSTANCE.open(),
                 new Delay(0.45),
-                new LambdaCommand("IncreaseFlywheelVelocity")
-                        .setStart(() -> {
-                            originalVelocity[0] = flywheel.INSTANCE.getGoalVelocity();
-                            flywheel.INSTANCE.setTargetVelocity(originalVelocity[0]-20);
-                        })
-                        .setIsDone(() -> true),
                 intake.INSTANCE.turnOn(950),
                 uptake.INSTANCE.turnOn(500),
                 new Delay(0.55),
