@@ -42,9 +42,9 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
         );
     }
 
-    public static int PRELOADVEL = 1443;
+    public static int PRELOADVEL = 1446;
     public static int SECONDVEL = 1480;
-    public static int CLASSVEL = 1546;
+    public static int CLASSVEL = 1548;
     public static int FIRSTVEL = 1553;
     public static int THIRDVEL = 1521;
 
@@ -60,12 +60,12 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
 
 
     Pose startPose = new Pose(33, 133, Math.toRadians(90)).mirror();
-    Pose launchPose = new Pose(54, 90, Math.toRadians(118)).mirror();
+    Pose launchPose = new Pose(54, 90, Math.toRadians(129)).mirror();
     Pose pickupRow2 = new Pose(12, 55, Math.toRadians(180)).mirror();
-    Pose pickupClassifier = new Pose(11, 63, Math.toRadians(155.5)).mirror();
-    Pose pickupRow1 = new Pose(18, 83, Math.toRadians(180)).mirror();
+    Pose pickupClassifier = new Pose(12, 63, Math.toRadians(160)).mirror();
+    Pose pickupRow1 = new Pose(18, 84, Math.toRadians(180)).mirror();
     Pose pickupRow3 = new Pose(12, 33, Math.toRadians(180)).mirror();
-    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(134)).mirror();
+    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(146)).mirror();
     Pose offLineTurn = new Pose(58, 106, Math.toRadians(180)).mirror();
 
     PathChain scorePreload;
@@ -82,7 +82,7 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
     public void buildPaths() {
         scorePreload = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(startPose, launchPose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), Math.PI - Math.toRadians(128))
+                .setLinearHeadingInterpolation(startPose.getHeading(), Math.PI - Math.toRadians(137))
                 .build();
         grabRow2 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(launchPose,
