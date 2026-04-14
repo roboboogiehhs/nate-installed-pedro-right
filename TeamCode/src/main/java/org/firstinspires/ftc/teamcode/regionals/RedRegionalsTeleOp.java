@@ -200,7 +200,7 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
         while (heading > Math.PI) heading -= 2 * Math.PI;
         while (heading < -Math.PI) heading += 2 * Math.PI;
 
-        return heading + Math.toRadians(4);
+        return heading - Math.toRadians(4);
     }
 
     @Override

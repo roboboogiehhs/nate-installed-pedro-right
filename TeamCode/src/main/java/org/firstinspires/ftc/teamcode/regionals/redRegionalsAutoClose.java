@@ -7,6 +7,7 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
+import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.PoseHistory;
@@ -41,12 +42,14 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
         );
     }
 
-    public static int PRELOADVEL = 1440;
+    public static int PRELOADVEL = 1443;
     public static int SECONDVEL = 1480;
-    public static int CLASSVEL = 1545;
+    public static int CLASSVEL = 1546;
     public static int FIRSTVEL = 1553;
-    public static int THIRDVEL = 1525;
+    public static int THIRDVEL = 1521;
 
+    private static final double RED_GOAL_X = 131;
+    private static final double RED_GOAL_Y = 137;
     private static final double ROBOT_RADIUS = 9;
     private final FieldManager panelsField = PanelsField.INSTANCE.getField();
     private final Style pathStyle = new Style("", "#F44336", 0.75);   // red for planned paths
@@ -57,12 +60,12 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
 
 
     Pose startPose = new Pose(33, 133, Math.toRadians(90)).mirror();
-    Pose launchPose = new Pose(54, 90, Math.toRadians(120)).mirror();
+    Pose launchPose = new Pose(54, 90, Math.toRadians(118)).mirror();
     Pose pickupRow2 = new Pose(12, 55, Math.toRadians(180)).mirror();
-    Pose pickupClassifier = new Pose(13, 63, Math.toRadians(155)).mirror();
-    Pose pickupRow1 = new Pose(18, 79, Math.toRadians(180)).mirror();
+    Pose pickupClassifier = new Pose(11, 63, Math.toRadians(155.5)).mirror();
+    Pose pickupRow1 = new Pose(18, 83, Math.toRadians(180)).mirror();
     Pose pickupRow3 = new Pose(12, 33, Math.toRadians(180)).mirror();
-    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(135)).mirror();
+    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(134)).mirror();
     Pose offLineTurn = new Pose(58, 106, Math.toRadians(180)).mirror();
 
     PathChain scorePreload;
@@ -79,13 +82,13 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
     public void buildPaths() {
         scorePreload = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(startPose, launchPose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), Math.PI - Math.toRadians(127))
+                .setLinearHeadingInterpolation(startPose.getHeading(), Math.PI - Math.toRadians(128))
                 .build();
         grabRow2 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(launchPose,
                         new Pose(55.480301274623386, 56.53476245654693).mirror(),
                         new Pose(54.81981460023173, 58.28447276940902).mirror(), pickupRow2))
-                .setLinearHeadingInterpolation(Math.PI - Math.toRadians(127), pickupRow2.getHeading())
+                .setLinearHeadingInterpolation(Math.PI - Math.toRadians(128), pickupRow2.getHeading())
                 .build();
         scoreRow2 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(pickupRow2,
@@ -100,7 +103,7 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
         scoreClassifier = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(pickupClassifier,
                         new Pose(38.505793742757824, 70.32966396292005).mirror(), launchPose))
-                .setLinearHeadingInterpolation(pickupClassifier.getHeading(), launchPose.getHeading())
+                .setLinearHeadingInterpolation(pickupClassifier.getHeading(), Math.PI - Math.toRadians(140))
                 .build();
         grabRow1 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(launchPose,
