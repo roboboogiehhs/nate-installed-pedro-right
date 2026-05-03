@@ -26,7 +26,7 @@ public class servo implements Subsystem {
 
     public Command close() {
         return new LambdaCommand("ServoClose")
-                .setStart(() -> hwServo.setPosition(1))
+                .setStart(() -> hwServo.setPosition(0.4))
                 .setIsDone(() -> true)
                 .requires(this);
     }

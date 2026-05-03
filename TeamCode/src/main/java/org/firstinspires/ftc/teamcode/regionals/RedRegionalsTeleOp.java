@@ -127,7 +127,7 @@ public class RedRegionalsTeleOp extends NextFTCOpMode {
         // RIGHT BUMPER: Feed and shoot
         Gamepads.gamepad1().rightBumper().whenBecomesTrue(
                 new LambdaCommand("Feed and Shoot")
-                        .setStart(() -> Shooting.feedAndShoot().schedule())
+                        .setStart(() -> Shooting.REDfeedAndShoot().schedule())
                         .setIsDone(() -> true)
         );
 

@@ -42,14 +42,12 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
         );
     }
 
-    public static int PRELOADVEL = 1446;
-    public static int SECONDVEL = 1480;
-    public static int CLASSVEL = 1548;
-    public static int FIRSTVEL = 1553;
-    public static int THIRDVEL = 1521;
+    public static double PRELOADVEL = 1448;
+    public static int SECONDVEL = 1482;
+    public static int CLASSVEL = 1545;
+    public static int FIRSTVEL = 1549;
+    public static int THIRDVEL = 1512;
 
-    private static final double RED_GOAL_X = 131;
-    private static final double RED_GOAL_Y = 137;
     private static final double ROBOT_RADIUS = 9;
     private final FieldManager panelsField = PanelsField.INSTANCE.getField();
     private final Style pathStyle = new Style("", "#F44336", 0.75);   // red for planned paths
@@ -62,11 +60,11 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
     Pose startPose = new Pose(33, 133, Math.toRadians(90)).mirror();
     Pose launchPose = new Pose(54, 90, Math.toRadians(129)).mirror();
     Pose pickupRow2 = new Pose(12, 55, Math.toRadians(180)).mirror();
-    Pose pickupClassifier = new Pose(12, 63, Math.toRadians(160)).mirror();
-    Pose pickupRow1 = new Pose(18, 84, Math.toRadians(180)).mirror();
+    Pose pickupClassifier = new Pose(12, 62.5, Math.toRadians(160.5)).mirror();
+    Pose pickupRow1 = new Pose(18, 83.5, Math.toRadians(180)).mirror();
     Pose pickupRow3 = new Pose(12, 33, Math.toRadians(180)).mirror();
-    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(146)).mirror();
-    Pose offLineTurn = new Pose(58, 106, Math.toRadians(180)).mirror();
+    Pose offLineLaunch = new Pose(56, 104, Math.toRadians(134)).mirror();
+    Pose offLineTurn = new Pose(60, 106, Math.toRadians(180)).mirror();
 
     PathChain scorePreload;
     PathChain grabRow2;
@@ -82,7 +80,7 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
     public void buildPaths() {
         scorePreload = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(startPose, launchPose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), Math.PI - Math.toRadians(137))
+                .setLinearHeadingInterpolation(startPose.getHeading(), Math.PI - Math.toRadians(129))
                 .build();
         grabRow2 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(launchPose,
@@ -93,7 +91,7 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
         scoreRow2 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(pickupRow2,
                         new Pose(46.17786790266511, 67.32850521436849).mirror(), launchPose))
-                .setLinearHeadingInterpolation(pickupRow2.getHeading(), launchPose.getHeading())
+                .setLinearHeadingInterpolation(pickupRow2.getHeading(), launchPose.getHeading()-Math.toRadians(2))
                 .build();
         grabClassifier = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(launchPose,
@@ -102,8 +100,8 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
                 .build();
         scoreClassifier = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(pickupClassifier,
-                        new Pose(38.505793742757824, 70.32966396292005).mirror(), launchPose))
-                .setLinearHeadingInterpolation(pickupClassifier.getHeading(), Math.PI - Math.toRadians(140))
+                        new Pose(40, 70.32966396292005).mirror(), launchPose))
+                .setLinearHeadingInterpolation(pickupClassifier.getHeading(), Math.PI - Math.toRadians(135))
                 .build();
         grabRow1 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(launchPose,
@@ -141,28 +139,28 @@ public class redRegionalsAutoClose extends NextFTCOpMode {
                         new FollowPath(scorePreload)
                 ),
 
-                Shooting.autoShoot(),
+                Shooting.autoShootRED(),
 
                 flywheel.INSTANCE.runAtVelocityAuto(SECONDVEL),
                 new FollowPath(grabRow2),
                 new FollowPath(scoreRow2),
-                Shooting.autoShoot(),
+                Shooting.autoShootRED(),
 
                 flywheel.INSTANCE.runAtVelocityAuto(CLASSVEL),
                 new FollowPath(grabClassifier),
                 new Delay(2),
                 new FollowPath(scoreClassifier),
-                Shooting.autoShoot(),
+                Shooting.autoShootRED(),
 
                 flywheel.INSTANCE.runAtVelocityAuto(FIRSTVEL),
                 new FollowPath(grabRow1),
                 new FollowPath(scoreRow1),
-                Shooting.autoShoot(),
+                Shooting.autoShootRED(),
 
                 flywheel.INSTANCE.runAtVelocityAuto(THIRDVEL),
                 new FollowPath(grabRow3),
                 new FollowPath(scoreRow3),
-                Shooting.autoShoot(),
+                Shooting.autoShootRED(),
 
                 new FollowPath(offLine)
         );
